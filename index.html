@@ -12,16 +12,23 @@
                 extend: {
                     colors: {
                         'terminal': {
-                            'bg': '#000000',
-                            'green': 'white',
-                            'green-dim': '#00cc00',
-                            'green-bright': '#00ff41',
-                            'gray': '#333333',
-                            'border': 'white'
+                            'bg': '#1e1e2e',
+                            'surface': '#313244',
+                            'overlay': '#45475a',
+                            'text': '#cdd6f4',
+                            'subtext': '#a6adc8',
+                            'green': '#a6e3a1',
+                            'blue': '#89b4fa',
+                            'yellow': '#f9e2af',
+                            'red': '#f38ba8',
+                            'purple': '#cba6f7',
+                            'pink': '#f5c2e7',
+                            'teal': '#94e2d5',
+                            'orange': '#fab387'
                         }
                     },
                     fontFamily: {
-                        'mono': ['Fira Code', 'Monaco', 'Consolas', 'monospace']
+                        'mono': ['JetBrains Mono', 'Fira Code', 'Monaco', 'Consolas', 'monospace']
                     },
                     animation: {
                         'fade-in': 'fadeIn 0.6s ease-out forwards',
@@ -35,7 +42,8 @@
                         'typing': 'typing 3.5s steps(40, end), blink-caret .75s step-end infinite',
                         'typing-slow': 'typing 4s steps(50, end), blink-caret .75s step-end infinite',
                         'typing-fast': 'typing 2s steps(30, end), blink-caret .75s step-end infinite',
-                        'matrix-rain': 'matrixRain 20s linear infinite'
+                        'gradient-shift': 'gradientShift 3s ease-in-out infinite',
+                        'slide-up': 'slideUp 0.3s ease-out forwards'
                     }
                 }
             }
@@ -43,143 +51,179 @@
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { 
-            font-family: 'Fira Code', monospace; 
+            font-family: 'JetBrains Mono', monospace; 
             overflow-x: hidden;
-            background: #000000;
-            color: white;
+            background: #1e1e2e;
+            color: #cdd6f4;
         }
         
-        .terminal-window {
-            background: #000000;
-            border: 2px solid white;
-            border-radius: 8px;
+        .modern-terminal {
+            background: linear-gradient(145deg, #1e1e2e 0%, #181825 100%);
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(205, 214, 244, 0.1);
+            backdrop-filter: blur(20px);
             position: relative;
+            overflow: hidden;
         }
         
         .terminal-header {
-            background: white;
-            color: #000000;
-            padding: 8px 16px;
-            font-weight: bold;
-            border-radius: 6px 6px 0 0;
+            background: linear-gradient(135deg, #313244 0%, #45475a 100%);
+            padding: 12px 20px;
+            border-radius: 12px 12px 0 0;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            border-bottom: 1px solid rgba(205, 214, 244, 0.1);
         }
         
-        .terminal-buttons {
+        .terminal-tabs {
             display: flex;
             gap: 8px;
+        }
+        
+        .terminal-tab {
+            background: rgba(205, 214, 244, 0.1);
+            color: #a6adc8;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+        
+        .terminal-tab.active {
+            background: rgba(166, 227, 161, 0.2);
+            color: #a6e3a1;
+            border-color: rgba(166, 227, 161, 0.3);
+        }
+        
+        .terminal-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
         }
         
         .terminal-button {
             width: 12px;
             height: 12px;
             border-radius: 50%;
-            background: #000000;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .terminal-button.close { background: #f38ba8; }
+        .terminal-button.minimize { background: #f9e2af; }
+        .terminal-button.maximize { background: #a6e3a1; }
+        
+        .terminal-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 8px currentColor;
         }
         
         .terminal-content {
-            padding: 20px;
-            background: #000000;
-            border-radius: 0 0 6px 6px;
+            padding: 24px;
+            background: rgba(30, 30, 46, 0.8);
+            border-radius: 0 0 12px 12px;
+            position: relative;
         }
         
         .prompt {
-            color: white;
-            font-weight: bold;
+            color: #a6e3a1;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
         
         .prompt::before {
-            content: "$ ";
-            color: #00ff41;
+            content: "❯";
+            color: #89b4fa;
+            font-weight: bold;
         }
         
         .command {
-            color: #00ff41;
+            color: #89b4fa;
+            font-weight: 500;
         }
         
         .output {
-            color: #00cc00;
-            margin-left: 20px;
+            color: #cdd6f4;
+            margin-left: 24px;
+            line-height: 1.6;
         }
         
+        .syntax-highlight .keyword { color: #cba6f7; }
+        .syntax-highlight .string { color: #a6e3a1; }
+        .syntax-highlight .number { color: #fab387; }
+        .syntax-highlight .comment { color: #6c7086; font-style: italic; }
+        .syntax-highlight .function { color: #89b4fa; }
+        .syntax-highlight .variable { color: #f5c2e7; }
+        
         .ascii-art {
-            font-family: 'Fira Code', monospace;
-            color: white;
+            font-family: 'JetBrains Mono', monospace;
+            color: #89b4fa;
             white-space: pre;
-            line-height: 1.2;
+            line-height: 1.1;
+            text-shadow: 0 0 10px rgba(137, 180, 250, 0.3);
         }
         
         .typing-animation {
-            border-right: 2px solid white;
+            border-right: 2px solid #a6e3a1;
             white-space: nowrap;
             overflow: hidden;
             animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
         }
 
         .typing-slow {
-            border-right: 2px solid white;
+            border-right: 2px solid #a6e3a1;
             white-space: nowrap;
             overflow: hidden;
             animation: typing-slow 4s steps(50, end), blink-caret .75s step-end infinite;
         }
 
         .typing-fast {
-            border-right: 2px solid white;
+            border-right: 2px solid #a6e3a1;
             white-space: nowrap;
             overflow: hidden;
             animation: typing-fast 2s steps(30, end), blink-caret .75s step-end infinite;
         }
         
-        .matrix-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-            opacity: 0.1;
-        }
-        
-        .matrix-char {
-            position: absolute;
-            color: white;
-            font-family: 'Fira Code', monospace;
-            font-size: 14px;
-            animation: matrixRain 20s linear infinite;
-        }
-        
         .card-hover {
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
         }
         
         .card-hover:hover {
             transform: translateY(-4px);
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
-            border-color: #00ff41;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(166, 227, 161, 0.2);
         }
         
         .skill-bar {
-            background: #333333;
-            height: 4px;
-            border-radius: 2px;
+            background: #45475a;
+            height: 6px;
+            border-radius: 3px;
             overflow: hidden;
             position: relative;
         }
         
         .skill-fill {
             height: 100%;
-            background: linear-gradient(90deg, white, #00ff41);
-            border-radius: 2px;
+            border-radius: 3px;
             position: relative;
+            transition: width 1s ease-out;
         }
+        
+        .skill-fill.php { background: linear-gradient(90deg, #777bb4, #8892bf); }
+        .skill-fill.laravel { background: linear-gradient(90deg, #ff2d20, #ff5722); }
+        .skill-fill.nodejs { background: linear-gradient(90deg, #339933, #68cc68); }
+        .skill-fill.go { background: linear-gradient(90deg, #00add8, #5dc9e2); }
+        .skill-fill.vue { background: linear-gradient(90deg, #4fc08d, #42b883); }
+        .skill-fill.javascript { background: linear-gradient(90deg, #f7df1e, #ffeb3b); }
         
         .skill-fill::after {
             content: '';
@@ -188,31 +232,70 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
             animation: shimmer 2s infinite;
         }
         
-        .btn-terminal {
-            background: #000000;
-            border: 2px solid white;
-            color: white;
+        .btn-modern {
+            background: linear-gradient(135deg, #313244 0%, #45475a 100%);
+            border: 1px solid rgba(166, 227, 161, 0.3);
+            color: #a6e3a1;
             padding: 12px 24px;
-            font-family: 'Fira Code', monospace;
-            font-weight: bold;
-            text-transform: uppercase;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            backdrop-filter: blur(10px);
         }
         
-        .btn-terminal:hover {
-            background: white;
-            color: #000000;
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+        .btn-modern:hover {
+            background: linear-gradient(135deg, #a6e3a1 0%, #94e2d5 100%);
+            color: #1e1e2e;
+            border-color: #a6e3a1;
+            box-shadow: 0 8px 25px rgba(166, 227, 161, 0.3);
+            transform: translateY(-2px);
         }
         
-        .btn-terminal::before {
-            content: '> ';
+        .btn-modern::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-modern:hover::before {
+            left: 100%;
+        }
+        
+        .status-bar {
+            background: rgba(49, 50, 68, 0.8);
+            padding: 8px 20px;
+            font-size: 12px;
+            color: #a6adc8;
+            border-top: 1px solid rgba(205, 214, 244, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #a6e3a1;
+            animation: pulse 2s infinite;
         }
         
         /* Scroll animations */
@@ -288,6 +371,17 @@
             }
         }
         
+        @keyframes slideUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+        
         @keyframes bounceIn {
             0% { 
                 opacity: 0; 
@@ -308,11 +402,16 @@
         
         @keyframes pulseGlow {
             0%, 100% { 
-                box-shadow: 0 0 20px rgba(0, 255, 0, 0.5); 
+                box-shadow: 0 0 20px rgba(166, 227, 161, 0.3); 
             }
             50% { 
-                box-shadow: 0 0 40px rgba(0, 255, 0, 0.8); 
+                box-shadow: 0 0 40px rgba(166, 227, 161, 0.6); 
             }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
         
         @keyframes float {
@@ -336,18 +435,12 @@
         
         @keyframes blink-caret {
             from, to { border-color: transparent; }
-            50% { border-color: white; }
+            50% { border-color: #a6e3a1; }
         }
         
-        @keyframes matrixRain {
-            0% { 
-                transform: translateY(-100vh); 
-                opacity: 1; 
-            }
-            100% { 
-                transform: translateY(100vh); 
-                opacity: 0; 
-            }
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
         
         /* Loading animation */
@@ -357,7 +450,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: #000000;
+            background: linear-gradient(135deg, #1e1e2e 0%, #181825 100%);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -365,13 +458,23 @@
             transition: opacity 0.5s ease-out;
         }
         
+        .loading-content {
+            text-align: center;
+            padding: 40px;
+            background: rgba(49, 50, 68, 0.8);
+            border-radius: 12px;
+            border: 1px solid rgba(166, 227, 161, 0.2);
+            backdrop-filter: blur(20px);
+        }
+        
         .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 3px solid #333333;
-            border-top: 3px solid white;
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(166, 227, 161, 0.3);
+            border-top: 3px solid #a6e3a1;
             border-radius: 50%;
             animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
         }
         
         @keyframes spin {
@@ -380,34 +483,40 @@
         }
         
         /* Navigation styling */
-        .nav-terminal {
-            background: rgba(0, 0, 0, 0.95);
-            border-bottom: 2px solid white;
-            backdrop-filter: blur(10px);
+        .nav-modern {
+            background: rgba(30, 30, 46, 0.95);
+            border-bottom: 1px solid rgba(205, 214, 244, 0.1);
+            backdrop-filter: blur(20px);
         }
         
         .nav-link {
-            color: white;
+            color: #a6adc8;
             transition: all 0.3s ease;
             position: relative;
             padding: 8px 16px;
-            border: 1px solid transparent;
+            border-radius: 6px;
+            font-weight: 500;
         }
         
         .nav-link:hover {
-            color: #000000;
-            background: white;
-            border-color: white;
+            color: #a6e3a1;
+            background: rgba(166, 227, 161, 0.1);
         }
         
-        .nav-link::before {
-            content: '> ';
-            opacity: 0;
-            transition: opacity 0.3s ease;
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: #a6e3a1;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
         }
         
-        .nav-link:hover::before {
-            opacity: 1;
+        .nav-link:hover::after {
+            width: 80%;
         }
         
         /* Mobile menu animation */
@@ -432,26 +541,50 @@
             opacity: 0;
             transition: all 0.3s ease-in;
         }
+        
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #1e1e2e;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #45475a;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #585b70;
+        }
+        
+        /* Selection styling */
+        ::selection {
+            background: rgba(166, 227, 161, 0.3);
+            color: #cdd6f4;
+        }
     </style>
 </head>
-<body class="bg-terminal-bg text-terminal-green font-mono antialiased">
-    <!-- Matrix Background -->
-    <div class="matrix-bg" id="matrix-bg"></div>
-
+<body class="bg-terminal-bg text-terminal-text font-mono antialiased">
     <!-- Loading Screen -->
     <div id="loading-overlay" class="loading-overlay">
-        <div class="text-center">
-            <div class="loading-spinner mx-auto mb-4"></div>
-            <div class="text-terminal-green text-xl font-bold">INITIALIZING SYSTEM...</div>
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <div class="text-terminal-green text-lg font-semibold mb-2">Initializing Terminal</div>
+            <div class="text-terminal-subtext text-sm">Loading cyberwizard environment...</div>
         </div>
     </div>
 
     <!-- Navigation -->
-    <nav class="fixed top-0 w-full nav-terminal z-50 transition-all duration-300">
+    <nav class="fixed top-0 w-full nav-modern z-50 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center py-4">
-                <div class="text-xl font-bold text-terminal-green animate-fade-in-left">
-                    <span class="text-terminal-green-bright">root@</span>cyberwizard<span class="text-terminal-green-bright">:~$</span>
+                <div class="text-lg font-bold text-terminal-green animate-fade-in-left flex items-center gap-2">
+                    <span class="text-terminal-blue">❯</span>
+                    <span class="text-terminal-purple">cyberwizard</span>
+                    <span class="text-terminal-subtext">@terminal</span>
                 </div>
                 <div class="hidden md:flex space-x-2">
                     <a href="#home" class="nav-link">home</a>
@@ -461,7 +594,7 @@
                     <a href="#projects" class="nav-link">projects</a>
                     <a href="#contact" class="nav-link">contact</a>
                 </div>
-                <button id="mobile-menu-btn" class="md:hidden text-terminal-green hover:text-terminal-green-bright transition-colors">
+                <button id="mobile-menu-btn" class="md:hidden text-terminal-text hover:text-terminal-green transition-colors">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
@@ -469,7 +602,7 @@
             </div>
         </div>
         <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-terminal-bg border-t border-terminal-green mobile-menu-enter">
+        <div id="mobile-menu" class="hidden md:hidden bg-terminal-surface border-t border-terminal-overlay mobile-menu-enter">
             <div class="px-2 pt-2 pb-3 space-y-1">
                 <a href="#home" class="block nav-link">home</a>
                 <a href="#about" class="block nav-link">about</a>
@@ -484,54 +617,91 @@
     <!-- Hero Section -->
     <section id="home" class="min-h-screen flex items-center justify-center relative overflow-hidden py-20">
         <div class="relative z-10 text-center max-w-6xl mx-auto px-4">
-            <div class="terminal-window animate-fade-in-up">
+            <div class="modern-terminal animate-fade-in-up">
                 <div class="terminal-header">
-                    <span>cyberwizard@terminal:~</span>
-                    <div class="terminal-buttons">
-                        <div class="terminal-button"></div>
-                        <div class="terminal-button"></div>
-                        <div class="terminal-button"></div>
+                    <div class="terminal-tabs">
+                        <div class="terminal-tab active">cyberwizard.sh</div>
+                        <div class="terminal-tab">portfolio.md</div>
+                        <div class="terminal-tab">skills.json</div>
+                    </div>
+                    <div class="terminal-controls">
+                        <div class="terminal-button close"></div>
+                        <div class="terminal-button minimize"></div>
+                        <div class="terminal-button maximize"></div>
                     </div>
                 </div>
                 <div class="terminal-content">
-                    <div class="ascii-art mb-8">
- ██████╗██╗   ██╗██████╗ ███████╗██████╗ ██╗    ██╗██╗███████╗ █████╗ ██████╗ ██████╗ 
-██╔════╝╚██╗ ██╔╝██╔══██╗██╔════╝██╔══██╗██║    ██║██║╚══███╔╝██╔══██╗██╔══██╗██╔══██╗
-██║      ╚████╔╝ ██████╔╝█████╗  ██████╔╝██║ █╗ ██║██║  ███╔╝ ███████║██████╔╝██║  ██║
-██║       ╚██╔╝  ██╔══██╗██╔══╝  ██╔══██╗██║███╗██║██║ ███╔╝  ██╔══██║██╔══██╗██║  ██║
-╚██████╗   ██║   ██████╔╝███████╗██║  ██║╚███╔███╔╝██║███████╗██║  ██║██║  ██║██████╔╝
- ╚═════╝   ╚═╝   ╚═════╝ ╚══════╝╚═╝  ╚═╝ ╚══╝╚══╝ ╚═╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ 
+                    <div class="ascii-art mb-8 text-center">
+   ▄████▄▓██   ██▓ ▄▄▄▄   ▓█████  ██▀███   █     █░ ██▓▒███████▒ ▄▄▄       ██▀███  ▓█████▄ 
+  ▒██▀ ▀█ ▒██  ██▒▓█████▄ ▓█   ▀ ▓██ ▒ ██▒▓█░ █ ░█░▓██▒▒ ▒ ▒ ▄▀░▒████▄    ▓██ ▒ ██▒▒██▀ ██▌
+  ▒▓█    ▄ ▒██ ██░▒██▒ ▄██▒███   ▓██ ░▄█ ▒▒█░ █ ░█ ▒██▒░ ▒ ▄▀▒░ ▒██  ▀█▄  ▓██ ░▄█ ▒░██   █▌
+  ▒▓▓▄ ▄██▒░ ▐██▓░▒██░█▀  ▒▓█  ▄ ▒██▀▀█▄  ░█░ █ ░█ ░██░  ▄▀▒   ░░██▄▄▄▄██ ▒██▀▀█▄  ░▓█▄   ▌
+  ▒ ▓███▀ ░░ ██▒▓░░▓█  ▀█▓░▒████▒░██▓ ▒██▒░░██▒██▓ ░██░▒███████▒ ▓█   ▓██▒░██▓ ▒██▒░▒████▓ 
+  ░ ░▒ ▒  ░ ██▒▒▒ ░▒▓███▀▒░░ ▒░ ░░ ▒▓ ░▒▓░░ ▓░▒ ▒  ░▓  ░▒▒ ▓░▒░▒ ▒▒   ▓▒█░░ ▒▓ ░▒▓░ ▒▒▓  ▒ 
+    ░  ▒  ▓██ ░▒░ ▒░▒   ░  ░ ░  ░  ░▒ ░ ▒░  ▒ ░ ░   ▒ ░░░▒ ▒ ░ ▒  ▒   ▒▒ ░  ░▒ ░ ▒░ ░ ▒  ▒ 
+  ░       ▒ ▒ ░░   ░    ░    ░     ░░   ░   ░   ░   ▒ ░░ ░ ░ ░ ░  ░   ▒     ░░   ░  ░ ░  ░ 
+  ░ ░     ░ ░      ░         ░  ░   ░         ░     ░    ░ ░          ░  ░   ░        ░    
+  ░       ░ ░           ░                                ░                           ░      
                     </div>
                     
-                    <div class="space-y-4 text-left">
-                        <div class="prompt typing-animation">whoami</div>
-                        <div class="output" style="animation-delay: 4s;">
-                            <div class="typing-slow" style="animation-delay: 4.5s;">Remilekun Arowosaye (Cyberwizard)</div>
+                    <div class="space-y-4 text-left max-w-4xl mx-auto">
+                        <div class="flex items-center gap-2">
+                            <span class="prompt typing-animation">whoami</span>
+                        </div>
+                        <div class="output syntax-highlight" style="animation-delay: 4s;">
+                            <div class="typing-slow animate-slide-up" style="animation-delay: 4.5s;">
+                                <span class="string">Remilekun Arowosaye</span> <span class="comment"># Also known as Cyberwizard</span>
+                            </div>
                         </div>
                         
-                        <div class="prompt typing-fast" style="animation-delay: 8s;">cat /etc/role</div>
-                        <div class="output" style="animation-delay: 10s;">
-                            <div class="typing-animation" style="animation-delay: 10.5s;">Backend Developer & DevOps Engineer</div>
+                        <div class="flex items-center gap-2" style="animation-delay: 8s;">
+                            <span class="prompt typing-fast" style="animation-delay: 8s;">cat ~/.config/role</span>
+                        </div>
+                        <div class="output syntax-highlight" style="animation-delay: 10s;">
+                            <div class="typing-animation animate-slide-up" style="animation-delay: 10.5s;">
+                                <span class="keyword">role:</span> <span class="string">"Backend Developer & DevOps Engineer"</span>
+                            </div>
                         </div>
                         
-                        <div class="prompt typing-fast" style="animation-delay: 14s;">grep -i experience /var/log/career.log</div>
-                        <div class="output" style="animation-delay: 16s;">
-                            <div class="typing-slow" style="animation-delay: 16.5s;">13+ years crafting robust backend solutions</div>
-                            <div class="typing-slow" style="animation-delay: 20s;">Specializing in wallet systems & enterprise software</div>
-                            <div class="typing-slow" style="animation-delay: 23.5s;">Location: Abuja, Nigeria</div>
+                        <div class="flex items-center gap-2" style="animation-delay: 14s;">
+                            <span class="prompt typing-fast" style="animation-delay: 14s;">grep -r "experience" ~/career/</span>
+                        </div>
+                        <div class="output syntax-highlight" style="animation-delay: 16s;">
+                            <div class="space-y-1">
+                                <div class="typing-slow animate-slide-up" style="animation-delay: 16.5s;">
+                                    <span class="variable">years_experience:</span> <span class="number">13+</span>
+                                </div>
+                                <div class="typing-slow animate-slide-up" style="animation-delay: 20s;">
+                                    <span class="variable">specialization:</span> <span class="string">"Wallet Systems & Enterprise Software"</span>
+                                </div>
+                                <div class="typing-slow animate-slide-up" style="animation-delay: 23.5s;">
+                                    <span class="variable">location:</span> <span class="string">"Abuja, Nigeria"</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
                     <div class="flex flex-col sm:flex-row gap-4 justify-center mt-12 animate-slide-in-bottom" style="animation-delay: 27s;">
-                        <a href="mailto:eminibest@gmail.com?subject=Project Inquiry&body=Hi Remilekun, I'd like to discuss a project with you." class="btn-terminal">
-                            SEND_EMAIL
+                        <a href="mailto:eminibest@gmail.com?subject=Project Inquiry&body=Hi Remilekun, I'd like to discuss a project with you." class="btn-modern">
+                            📧 Send Email
                         </a>
-                        <a href="https://wa.me/2347085307378?text=Hi%20Remilekun,%20I'd%20like%20to%20discuss%20a%20project%20with%20you." target="_blank" class="btn-terminal">
-                            WHATSAPP_CHAT
+                        <a href="https://wa.me/2347085307378?text=Hi%20Remilekun,%20I'd%20like%20to%20discuss%20a%20project%20with%20you." target="_blank" class="btn-modern">
+                            💬 WhatsApp
                         </a>
-                        <a href="https://github.com/cyberwizard-dev" target="_blank" class="btn-terminal">
-                            VIEW_GITHUB
+                        <a href="https://github.com/cyberwizard-dev" target="_blank" class="btn-modern">
+                            🔗 GitHub
                         </a>
+                    </div>
+                </div>
+                <div class="status-bar">
+                    <div class="status-indicator">
+                        <div class="status-dot"></div>
+                        <span>Connected</span>
+                    </div>
+                    <div class="flex gap-4 text-xs">
+                        <span>Ln 42, Col 1</span>
+                        <span>UTF-8</span>
+                        <span>Bash</span>
                     </div>
                 </div>
             </div>
@@ -541,59 +711,74 @@
     <!-- About Section -->
     <section id="about" class="py-20 bg-terminal-bg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="terminal-window animate-on-scroll">
+            <div class="modern-terminal animate-on-scroll">
                 <div class="terminal-header">
-                    <span>about.sh --verbose</span>
-                    <div class="terminal-buttons">
-                        <div class="terminal-button"></div>
-                        <div class="terminal-button"></div>
-                        <div class="terminal-button"></div>
+                    <div class="terminal-tabs">
+                        <div class="terminal-tab active">about.md</div>
+                        <div class="terminal-tab">journey.log</div>
+                    </div>
+                    <div class="terminal-controls">
+                        <div class="terminal-button close"></div>
+                        <div class="terminal-button minimize"></div>
+                        <div class="terminal-button maximize"></div>
                     </div>
                 </div>
                 <div class="terminal-content">
                     <div class="grid md:grid-cols-2 gap-12">
                         <div>
-                            <div class="prompt typing-slow">cat journey.txt</div>
-                            <div class="output mt-4 space-y-4">
+                            <div class="prompt typing-slow">cat about.md</div>
+                            <div class="output mt-6 space-y-4 syntax-highlight">
                                 <p class="leading-relaxed">
-                                    With over 13 years in backend development, I've architected and built systems that handle millions of transactions, manage thousands of users, and power critical business operations.
+                                    <span class="comment"># The Journey</span><br/>
+                                    With over <span class="number">13</span> years in backend development, I've architected and built systems that handle millions of transactions, manage thousands of users, and power critical business operations.
                                 </p>
                                 <p class="leading-relaxed">
-                                    My expertise spans from traditional PHP/Laravel applications to modern Node.js services and emerging Go technologies. I specialize in creating robust, scalable solutions for complex business problems.
+                                    My expertise spans from traditional <span class="keyword">PHP/Laravel</span> applications to modern <span class="keyword">Node.js</span> services and emerging <span class="keyword">Go</span> technologies. I specialize in creating robust, scalable solutions for complex business problems.
                                 </p>
                                 <p class="leading-relaxed">
-                                    Beyond coding, I'm passionate about DevOps practices, containerization, and continuous integration. I believe in building maintainable, deployable, and scalable systems.
+                                    Beyond coding, I'm passionate about <span class="function">DevOps</span> practices, containerization, and continuous integration. I believe in building maintainable, deployable, and scalable systems.
                                 </p>
                             </div>
                         </div>
                         
                         <div class="space-y-6">
-                            <div class="terminal-window card-hover stagger-animation">
+                            <div class="modern-terminal card-hover stagger-animation">
                                 <div class="terminal-header">
-                                    <span class="typing-fast">core_expertise.json</span>
+                                    <div class="terminal-tabs">
+                                        <div class="terminal-tab active typing-fast">expertise.json</div>
+                                    </div>
                                 </div>
                                 <div class="terminal-content">
-                                    <div class="space-y-2 text-sm">
-                                        <div>• Backend Architecture & API Development</div>
-                                        <div>• Financial Systems & Wallet Solutions</div>
-                                        <div>• Enterprise Management Software</div>
-                                        <div>• DevOps & Cloud Infrastructure</div>
+                                    <div class="syntax-highlight text-sm space-y-2">
+                                        <div><span class="string">"backend_architecture"</span>: <span class="keyword">true</span>,</div>
+                                        <div><span class="string">"financial_systems"</span>: <span class="keyword">true</span>,</div>
+                                        <div><span class="string">"enterprise_software"</span>: <span class="keyword">true</span>,</div>
+                                        <div><span class="string">"devops_cloud"</span>: <span class="keyword">true</span></div>
                                     </div>
                                 </div>
                             </div>
                             
-                            <div class="terminal-window card-hover stagger-animation" style="animation-delay: 0.2s;">
+                            <div class="modern-terminal card-hover stagger-animation" style="animation-delay: 0.2s;">
                                 <div class="terminal-header">
-                                    <span class="typing-fast" style="animation-delay: 0.5s;">open_source.md</span>
+                                    <div class="terminal-tabs">
+                                        <div class="terminal-tab active typing-fast" style="animation-delay: 0.5s;">opensource.yml</div>
+                                    </div>
                                 </div>
                                 <div class="terminal-content">
-                                    <p class="text-sm">
-                                        Active contributor to the developer community with multiple open source libraries and packages that help other developers build better applications.
-                                    </p>
+                                    <div class="syntax-highlight text-sm">
+                                        <span class="keyword">contribution:</span> <span class="string">"Active contributor to the developer community with multiple open source libraries and packages that help other developers build better applications."</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="status-bar">
+                    <div class="status-indicator">
+                        <div class="status-dot"></div>
+                        <span>File saved</span>
+                    </div>
+                    <div class="text-xs">Modified 2 minutes ago</div>
                 </div>
             </div>
         </div>
@@ -602,107 +787,117 @@
     <!-- Skills Section -->
     <section id="skills" class="py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="terminal-window animate-on-scroll">
+            <div class="modern-terminal animate-on-scroll">
                 <div class="terminal-header">
-                    <span class="typing-fast">skills --list --all</span>
-                    <div class="terminal-buttons">
-                        <div class="terminal-button"></div>
-                        <div class="terminal-button"></div>
-                        <div class="terminal-button"></div>
+                    <div class="terminal-tabs">
+                        <div class="terminal-tab active typing-fast">skills.json</div>
+                        <div class="terminal-tab">technologies.yml</div>
+                    </div>
+                    <div class="terminal-controls">
+                        <div class="terminal-button close"></div>
+                        <div class="terminal-button minimize"></div>
+                        <div class="terminal-button maximize"></div>
                     </div>
                 </div>
                 <div class="terminal-content">
                     <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
                         <div class="stagger-animation">
-                            <div class="prompt typing-fast">./backend_languages</div>
-                            <div class="output mt-4 space-y-3">
+                            <div class="prompt typing-fast">./backend --list</div>
+                            <div class="output mt-4 space-y-4">
                                 <div class="flex justify-between items-center">
-                                    <span>PHP</span>
+                                    <span class="text-terminal-text">PHP</span>
                                     <div class="w-32 skill-bar">
-                                        <div class="skill-fill w-full transition-all duration-1000 ease-out"></div>
+                                        <div class="skill-fill php w-full transition-all duration-1000 ease-out"></div>
                                     </div>
                                 </div>
                                 <div class="flex justify-between items-center">
-                                    <span>Laravel</span>
+                                    <span class="text-terminal-text">Laravel</span>
                                     <div class="w-32 skill-bar">
-                                        <div class="skill-fill w-full transition-all duration-1000 ease-out" style="animation-delay: 0.2s;"></div>
+                                        <div class="skill-fill laravel w-full transition-all duration-1000 ease-out" style="animation-delay: 0.2s;"></div>
                                     </div>
                                 </div>
                                 <div class="flex justify-between items-center">
-                                    <span>Node.js</span>
+                                    <span class="text-terminal-text">Node.js</span>
                                     <div class="w-32 skill-bar">
-                                        <div class="skill-fill w-5/6 transition-all duration-1000 ease-out" style="animation-delay: 0.4s;"></div>
+                                        <div class="skill-fill nodejs w-5/6 transition-all duration-1000 ease-out" style="animation-delay: 0.4s;"></div>
                                     </div>
                                 </div>
                                 <div class="flex justify-between items-center">
-                                    <span>Go</span>
+                                    <span class="text-terminal-text">Go</span>
                                     <div class="w-32 skill-bar">
-                                        <div class="skill-fill w-2/3 transition-all duration-1000 ease-out" style="animation-delay: 0.6s;"></div>
+                                        <div class="skill-fill go w-2/3 transition-all duration-1000 ease-out" style="animation-delay: 0.6s;"></div>
                                     </div>
                                 </div>
                                 <div class="flex justify-between items-center">
-                                    <span>Goravel</span>
+                                    <span class="text-terminal-text">Goravel</span>
                                     <div class="w-32 skill-bar">
-                                        <div class="skill-fill w-1/2 transition-all duration-1000 ease-out" style="animation-delay: 0.8s;"></div>
+                                        <div class="skill-fill go w-1/2 transition-all duration-1000 ease-out" style="animation-delay: 0.8s;"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         
                         <div class="stagger-animation" style="animation-delay: 0.2s;">
-                            <div class="prompt typing-fast" style="animation-delay: 0.2s;">./frontend_ui</div>
-                            <div class="output mt-4 space-y-3">
+                            <div class="prompt typing-fast" style="animation-delay: 0.2s;">./frontend --show</div>
+                            <div class="output mt-4 space-y-4">
                                 <div class="flex justify-between items-center">
-                                    <span>Vue.js</span>
+                                    <span class="text-terminal-text">Vue.js</span>
                                     <div class="w-32 skill-bar">
-                                        <div class="skill-fill w-5/6 transition-all duration-1000 ease-out"></div>
+                                        <div class="skill-fill vue w-5/6 transition-all duration-1000 ease-out"></div>
                                     </div>
                                 </div>
                                 <div class="flex justify-between items-center">
-                                    <span>JavaScript</span>
+                                    <span class="text-terminal-text">JavaScript</span>
                                     <div class="w-32 skill-bar">
-                                        <div class="skill-fill w-full transition-all duration-1000 ease-out" style="animation-delay: 0.2s;"></div>
+                                        <div class="skill-fill javascript w-full transition-all duration-1000 ease-out" style="animation-delay: 0.2s;"></div>
                                     </div>
                                 </div>
                                 <div class="flex justify-between items-center">
-                                    <span>HTML/CSS</span>
+                                    <span class="text-terminal-text">HTML/CSS</span>
                                     <div class="w-32 skill-bar">
-                                        <div class="skill-fill w-full transition-all duration-1000 ease-out" style="animation-delay: 0.4s;"></div>
+                                        <div class="skill-fill javascript w-full transition-all duration-1000 ease-out" style="animation-delay: 0.4s;"></div>
                                     </div>
                                 </div>
                                 <div class="flex justify-between items-center">
-                                    <span>Tailwind</span>
+                                    <span class="text-terminal-text">Tailwind</span>
                                     <div class="w-32 skill-bar">
-                                        <div class="skill-fill w-5/6 transition-all duration-1000 ease-out" style="animation-delay: 0.6s;"></div>
+                                        <div class="skill-fill vue w-5/6 transition-all duration-1000 ease-out" style="animation-delay: 0.6s;"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         
                         <div class="stagger-animation" style="animation-delay: 0.4s;">
-                            <div class="prompt typing-fast" style="animation-delay: 0.4s;">./devops_tools</div>
-                            <div class="output mt-4 space-y-2 text-sm">
-                                <div>• Docker & Containerization</div>
-                                <div>• Continuous Integration/CD</div>
-                                <div>• Server Deployment & Management</div>
-                                <div>• Cloud Infrastructure (AWS, GCP)</div>
-                                <div>• Load Balancing & Scaling</div>
-                                <div>• Monitoring & Logging</div>
+                            <div class="prompt typing-fast" style="animation-delay: 0.4s;">./devops --tools</div>
+                            <div class="output mt-4 space-y-2 text-sm syntax-highlight">
+                                <div>• <span class="keyword">Docker</span> & Containerization</div>
+                                <div>• <span class="keyword">CI/CD</span> Pipelines</div>
+                                <div>• <span class="keyword">AWS</span>, <span class="keyword">GCP</span> Cloud</div>
+                                <div>• <span class="keyword">Kubernetes</span> Orchestration</div>
+                                <div>• <span class="keyword">Monitoring</span> & Logging</div>
+                                <div>• <span class="keyword">Infrastructure</span> as Code</div>
                             </div>
                         </div>
                         
                         <div class="stagger-animation" style="animation-delay: 0.6s;">
-                            <div class="prompt typing-fast" style="animation-delay: 0.6s;">./databases_tools</div>
-                            <div class="output mt-4 space-y-2 text-sm">
-                                <div>• MySQL, PostgreSQL</div>
-                                <div>• Redis, MongoDB</div>
-                                <div>• RESTful API Design</div>
-                                <div>• GraphQL</div>
-                                <div>• Git Version Control</div>
-                                <div>• Agile Development</div>
+                            <div class="prompt typing-fast" style="animation-delay: 0.6s;">./database --list</div>
+                            <div class="output mt-4 space-y-2 text-sm syntax-highlight">
+                                <div>• <span class="keyword">MySQL</span>, <span class="keyword">PostgreSQL</span></div>
+                                <div>• <span class="keyword">Redis</span>, <span class="keyword">MongoDB</span></div>
+                                <div>• <span class="keyword">RESTful</span> API Design</div>
+                                <div>• <span class="keyword">GraphQL</span> Implementation</div>
+                                <div>• <span class="keyword">Git</span> Version Control</div>
+                                <div>• <span class="keyword">Agile</span> Development</div>
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="status-bar">
+                    <div class="status-indicator">
+                        <div class="status-dot"></div>
+                        <span>Skills loaded</span>
+                    </div>
+                    <div class="text-xs">Last updated: Today</div>
                 </div>
             </div>
         </div>
@@ -711,68 +906,93 @@
     <!-- Experience Section -->
     <section id="experience" class="py-20 bg-terminal-bg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="terminal-window animate-on-scroll">
+            <div class="modern-terminal animate-on-scroll">
                 <div class="terminal-header">
-                    <span class="typing-slow">find /var/projects -type f -name "*.experience"</span>
-                    <div class="terminal-buttons">
-                        <div class="terminal-button"></div>
-                        <div class="terminal-button"></div>
-                        <div class="terminal-button"></div>
+                    <div class="terminal-tabs">
+                        <div class="terminal-tab active typing-slow">projects.log</div>
+                        <div class="terminal-tab">experience.md</div>
+                    </div>
+                    <div class="terminal-controls">
+                        <div class="terminal-button close"></div>
+                        <div class="terminal-button minimize"></div>
+                        <div class="terminal-button maximize"></div>
                     </div>
                 </div>
                 <div class="terminal-content">
                     <div class="space-y-8">
-                        <div class="terminal-window card-hover stagger-animation">
+                        <div class="modern-terminal card-hover stagger-animation">
                             <div class="terminal-header">
-                                <span class="typing-slow">financial_wallet_systems.log</span>
+                                <div class="terminal-tabs">
+                                    <div class="terminal-tab active typing-slow">wallet_systems.md</div>
+                                </div>
                             </div>
                             <div class="terminal-content">
-                                <p class="mb-4">
-                                    Architected and developed secure, scalable wallet systems handling millions in transactions. Implemented multi-currency support, real-time balance tracking, and comprehensive audit trails with 99.9% uptime.
-                                </p>
-                                <div class="flex flex-wrap gap-2">
-                                    <span class="px-3 py-1 bg-terminal-bg border border-terminal-green text-terminal-green text-sm">PHP</span>
-                                    <span class="px-3 py-1 bg-terminal-bg border border-terminal-green text-terminal-green text-sm">Laravel</span>
-                                    <span class="px-3 py-1 bg-terminal-bg border border-terminal-green text-terminal-green text-sm">MySQL</span>
-                                    <span class="px-3 py-1 bg-terminal-bg border border-terminal-green text-terminal-green text-sm">Redis</span>
+                                <div class="syntax-highlight">
+                                    <h3 class="text-lg font-semibold mb-3 text-terminal-blue"># Financial Wallet Systems</h3>
+                                    <p class="mb-4 leading-relaxed">
+                                        Architected and developed secure, scalable wallet systems handling millions in transactions. Implemented multi-currency support, real-time balance tracking, and comprehensive audit trails with <span class="number">99.9%</span> uptime.
+                                    </p>
+                                    <div class="flex flex-wrap gap-2">
+                                        <span class="px-3 py-1 bg-terminal-surface border border-terminal-blue text-terminal-blue text-sm rounded">PHP</span>
+                                        <span class="px-3 py-1 bg-terminal-surface border border-terminal-red text-terminal-red text-sm rounded">Laravel</span>
+                                        <span class="px-3 py-1 bg-terminal-surface border border-terminal-green text-terminal-green text-sm rounded">MySQL</span>
+                                        <span class="px-3 py-1 bg-terminal-surface border border-terminal-purple text-terminal-purple text-sm rounded">Redis</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="terminal-window card-hover stagger-animation" style="animation-delay: 0.2s;">
+                        <div class="modern-terminal card-hover stagger-animation" style="animation-delay: 0.2s;">
                             <div class="terminal-header">
-                                <span class="typing-slow" style="animation-delay: 0.3s;">attendance_management.log</span>
+                                <div class="terminal-tabs">
+                                    <div class="terminal-tab active typing-slow" style="animation-delay: 0.3s;">attendance_mgmt.md</div>
+                                </div>
                             </div>
                             <div class="terminal-content">
-                                <p class="mb-4">
-                                    Built comprehensive attendance tracking solutions for enterprises, featuring biometric integration, automated reporting, and real-time analytics. Served organizations with 10,000+ employees.
-                                </p>
-                                <div class="flex flex-wrap gap-2">
-                                    <span class="px-3 py-1 bg-terminal-bg border border-terminal-green text-terminal-green text-sm">Laravel</span>
-                                    <span class="px-3 py-1 bg-terminal-bg border border-terminal-green text-terminal-green text-sm">JavaScript</span>
-                                    <span class="px-3 py-1 bg-terminal-bg border border-terminal-green text-terminal-green text-sm">PostgreSQL</span>
-                                    <span class="px-3 py-1 bg-terminal-bg border border-terminal-green text-terminal-green text-sm">Docker</span>
+                                <div class="syntax-highlight">
+                                    <h3 class="text-lg font-semibold mb-3 text-terminal-teal"># Attendance Management Systems</h3>
+                                    <p class="mb-4 leading-relaxed">
+                                        Built comprehensive attendance tracking solutions for enterprises, featuring biometric integration, automated reporting, and real-time analytics. Served organizations with <span class="number">10,000+</span> employees.
+                                    </p>
+                                    <div class="flex flex-wrap gap-2">
+                                        <span class="px-3 py-1 bg-terminal-surface border border-terminal-red text-terminal-red text-sm rounded">Laravel</span>
+                                        <span class="px-3 py-1 bg-terminal-surface border border-terminal-yellow text-terminal-yellow text-sm rounded">JavaScript</span>
+                                        <span class="px-3 py-1 bg-terminal-surface border border-terminal-blue text-terminal-blue text-sm rounded">PostgreSQL</span>
+                                        <span class="px-3 py-1 bg-terminal-surface border border-terminal-teal text-terminal-teal text-sm rounded">Docker</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="terminal-window card-hover stagger-animation" style="animation-delay: 0.4s;">
+                        <div class="modern-terminal card-hover stagger-animation" style="animation-delay: 0.4s;">
                             <div class="terminal-header">
-                                <span class="typing-slow" style="animation-delay: 0.6s;">people_management.log</span>
+                                <div class="terminal-tabs">
+                                    <div class="terminal-tab active typing-slow" style="animation-delay: 0.6s;">hr_platform.md</div>
+                                </div>
                             </div>
                             <div class="terminal-content">
-                                <p class="mb-4">
-                                    Developed enterprise-grade HR and people management platforms with features including employee onboarding, performance tracking, payroll integration, and advanced reporting capabilities.
-                                </p>
-                                <div class="flex flex-wrap gap-2">
-                                    <span class="px-3 py-1 bg-terminal-bg border border-terminal-green text-terminal-green text-sm">Node.js</span>
-                                    <span class="px-3 py-1 bg-terminal-bg border border-terminal-green text-terminal-green text-sm">Express</span>
-                                    <span class="px-3 py-1 bg-terminal-bg border border-terminal-green text-terminal-green text-sm">MongoDB</span>
-                                    <span class="px-3 py-1 bg-terminal-bg border border-terminal-green text-terminal-green text-sm">AWS</span>
+                                <div class="syntax-highlight">
+                                    <h3 class="text-lg font-semibold mb-3 text-terminal-purple"># People Management Software</h3>
+                                    <p class="mb-4 leading-relaxed">
+                                        Developed enterprise-grade HR and people management platforms with features including employee onboarding, performance tracking, payroll integration, and advanced reporting capabilities.
+                                    </p>
+                                    <div class="flex flex-wrap gap-2">
+                                        <span class="px-3 py-1 bg-terminal-surface border border-terminal-green text-terminal-green text-sm rounded">Node.js</span>
+                                        <span class="px-3 py-1 bg-terminal-surface border border-terminal-blue text-terminal-blue text-sm rounded">Express</span>
+                                        <span class="px-3 py-1 bg-terminal-surface border border-terminal-orange text-terminal-orange text-sm rounded">MongoDB</span>
+                                        <span class="px-3 py-1 bg-terminal-surface border border-terminal-yellow text-terminal-yellow text-sm rounded">AWS</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="status-bar">
+                    <div class="status-indicator">
+                        <div class="status-dot"></div>
+                        <span>3 projects loaded</span>
+                    </div>
+                    <div class="text-xs">Total experience: 13+ years</div>
                 </div>
             </div>
         </div>
@@ -781,48 +1001,59 @@
     <!-- Projects Section -->
     <section id="projects" class="py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="terminal-window animate-on-scroll">
+            <div class="modern-terminal animate-on-scroll">
                 <div class="terminal-header">
-                    <span>git log --oneline --graph --all</span>
-                    <div class="terminal-buttons">
-                        <div class="terminal-button"></div>
-                        <div class="terminal-button"></div>
-                        <div class="terminal-button"></div>
+                    <div class="terminal-tabs">
+                        <div class="terminal-tab active">github.com/cyberwizard-dev</div>
+                        <div class="terminal-tab">opensource.json</div>
+                    </div>
+                    <div class="terminal-controls">
+                        <div class="terminal-button close"></div>
+                        <div class="terminal-button minimize"></div>
+                        <div class="terminal-button maximize"></div>
                     </div>
                 </div>
                 <div class="terminal-content">
                     <div class="text-center mb-12">
-                        <p class="text-lg mb-8">
+                        <div class="prompt mb-6">git log --oneline --graph --all</div>
+                        <p class="text-lg mb-8 text-terminal-subtext">
                             I believe in giving back to the developer community through open source contributions and creating tools that help other developers build better applications.
                         </p>
-                        <a href="https://github.com/cyberwizard-dev" target="_blank" class="btn-terminal inline-flex items-center">
+                        <a href="https://github.com/cyberwizard-dev" target="_blank" class="btn-modern inline-flex items-center">
                             <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M10 0C4.477 0 0 4.484 0 10.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0110 4.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.942.359.31.678.921.678 1.856 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0020 10.017C20 4.484 15.522 0 10 0z" clip-rule="evenodd"></path>
                             </svg>
-                            EXPLORE_GITHUB
+                            🚀 Explore GitHub
                         </a>
                     </div>
                     
                     <div class="grid md:grid-cols-3 gap-8">
-                        <div class="terminal-window card-hover text-center stagger-animation">
+                        <div class="modern-terminal card-hover text-center stagger-animation">
                             <div class="terminal-content">
-                                <div class="text-4xl font-bold text-terminal-green-bright mb-2 animate-bounce-in">13+</div>
-                                <div class="text-terminal-green">Years Experience</div>
+                                <div class="text-4xl font-bold text-terminal-green mb-2 animate-bounce-in">13+</div>
+                                <div class="text-terminal-subtext">Years Experience</div>
                             </div>
                         </div>
-                        <div class="terminal-window card-hover text-center stagger-animation" style="animation-delay: 0.2s;">
+                        <div class="modern-terminal card-hover text-center stagger-animation" style="animation-delay: 0.2s;">
                             <div class="terminal-content">
-                                <div class="text-4xl font-bold text-terminal-green-bright mb-2 animate-bounce-in" style="animation-delay: 0.2s;">50+</div>
-                                <div class="text-terminal-green">Projects Completed</div>
+                                <div class="text-4xl font-bold text-terminal-blue mb-2 animate-bounce-in" style="animation-delay: 0.2s;">50+</div>
+                                <div class="text-terminal-subtext">Projects Completed</div>
                             </div>
                         </div>
-                        <div class="terminal-window card-hover text-center stagger-animation" style="animation-delay: 0.4s;">
+                        <div class="modern-terminal card-hover text-center stagger-animation" style="animation-delay: 0.4s;">
                             <div class="terminal-content">
-                                <div class="text-4xl font-bold text-terminal-green-bright mb-2 animate-bounce-in" style="animation-delay: 0.4s;">∞</div>
-                                <div class="text-terminal-green">Lines of Code</div>
+                                <div class="text-4xl font-bold text-terminal-purple mb-2 animate-bounce-in" style="animation-delay: 0.4s;">∞</div>
+                                <div class="text-terminal-subtext">Lines of Code</div>
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="status-bar">
+                    <div class="status-indicator">
+                        <div class="status-dot"></div>
+                        <span>Repository active</span>
+                    </div>
+                    <div class="text-xs">Last commit: 2 hours ago</div>
                 </div>
             </div>
         </div>
@@ -831,90 +1062,105 @@
     <!-- Contact Section -->
     <section id="contact" class="py-20 bg-terminal-bg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="terminal-window animate-on-scroll">
+            <div class="modern-terminal animate-on-scroll">
                 <div class="terminal-header">
-                    <span>contact --interactive</span>
-                    <div class="terminal-buttons">
-                        <div class="terminal-button"></div>
-                        <div class="terminal-button"></div>
-                        <div class="terminal-button"></div>
+                    <div class="terminal-tabs">
+                        <div class="terminal-tab active">contact.sh</div>
+                        <div class="terminal-tab">message_form.html</div>
+                    </div>
+                    <div class="terminal-controls">
+                        <div class="terminal-button close"></div>
+                        <div class="terminal-button minimize"></div>
+                        <div class="terminal-button maximize"></div>
                     </div>
                 </div>
                 <div class="terminal-content">
                     <div class="grid md:grid-cols-2 gap-12">
                         <div>
-                            <div class="prompt typing-fast">cat contact_info.txt</div>
-                            <div class="output mt-6 space-y-4">
+                            <div class="prompt typing-fast">cat contact_info.json</div>
+                            <div class="output mt-6 space-y-4 syntax-highlight">
                                 <p class="leading-relaxed mb-8">
                                     Ready to discuss your next project? Whether you need a robust backend system, DevOps consultation, or want to collaborate on open source projects, I'd love to hear from you.
                                 </p>
                                 
                                 <div class="space-y-3">
                                     <div class="flex items-center group transition-all duration-300 hover:translate-x-2">
-                                        <span class="text-terminal-green-bright mr-4">EMAIL:</span>
-                                        <a href="mailto:eminibest@gmail.com?subject=Project Inquiry&body=Hi Remilekun, I'd like to discuss a project with you." class="text-terminal-green hover:text-terminal-green-bright transition-colors">eminibest@gmail.com</a>
+                                        <span class="text-terminal-blue mr-4 font-semibold">📧 EMAIL:</span>
+                                        <a href="mailto:eminibest@gmail.com?subject=Project Inquiry&body=Hi Remilekun, I'd like to discuss a project with you." class="text-terminal-green hover:text-terminal-teal transition-colors">eminibest@gmail.com</a>
                                     </div>
                                     <div class="flex items-center group transition-all duration-300 hover:translate-x-2">
-                                        <span class="text-terminal-green-bright mr-4">PHONE:</span>
-                                        <a href="tel:+2347085307378" class="text-terminal-green hover:text-terminal-green-bright transition-colors">+234 708 530 7378</a>
+                                        <span class="text-terminal-purple mr-4 font-semibold">📱 PHONE:</span>
+                                        <a href="tel:+2347085307378" class="text-terminal-green hover:text-terminal-teal transition-colors">+234 708 530 7378</a>
                                     </div>
                                     <div class="flex items-center group transition-all duration-300 hover:translate-x-2">
-                                        <span class="text-terminal-green-bright mr-4">WHATSAPP:</span>
-                                        <a href="https://wa.me/2347085307378?text=Hi%20Remilekun,%20I'd%20like%20to%20discuss%20a%20project%20with%20you." target="_blank" class="text-terminal-green hover:text-terminal-green-bright transition-colors">Chat Now</a>
+                                        <span class="text-terminal-green mr-4 font-semibold">💬 WHATSAPP:</span>
+                                        <a href="https://wa.me/2347085307378?text=Hi%20Remilekun,%20I'd%20like%20to%20discuss%20a%20project%20with%20you." target="_blank" class="text-terminal-green hover:text-terminal-teal transition-colors">Chat Now</a>
                                     </div>
                                     <div class="flex items-center group transition-all duration-300 hover:translate-x-2">
-                                        <span class="text-terminal-green-bright mr-4">LINKEDIN:</span>
-                                        <a href="https://www.linkedin.com/in/remilekun-arowosaye/" target="_blank" class="text-terminal-green hover:text-terminal-green-bright transition-colors">Connect</a>
+                                        <span class="text-terminal-blue mr-4 font-semibold">🔗 LINKEDIN:</span>
+                                        <a href="https://www.linkedin.com/in/remilekun-arowosaye/" target="_blank" class="text-terminal-green hover:text-terminal-teal transition-colors">Connect</a>
                                     </div>
                                     <div class="flex items-center group transition-all duration-300 hover:translate-x-2">
-                                        <span class="text-terminal-green-bright mr-4">GITHUB:</span>
-                                        <a href="https://github.com/cyberwizard-dev" target="_blank" class="text-terminal-green hover:text-terminal-green-bright transition-colors">cyberwizard-dev</a>
+                                        <span class="text-terminal-purple mr-4 font-semibold">🚀 GITHUB:</span>
+                                        <a href="https://github.com/cyberwizard-dev" target="_blank" class="text-terminal-green hover:text-terminal-teal transition-colors">cyberwizard-dev</a>
                                     </div>
                                     <div class="flex items-center group transition-all duration-300 hover:translate-x-2">
-                                        <span class="text-terminal-green-bright mr-4">LOCATION:</span>
-                                        <span class="text-terminal-green">Abuja, Nigeria</span>
+                                        <span class="text-terminal-orange mr-4 font-semibold">📍 LOCATION:</span>
+                                        <span class="text-terminal-subtext">Abuja, Nigeria</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="terminal-window card-hover">
+                        <div class="modern-terminal card-hover">
                             <div class="terminal-header">
-                                <span>message_form.sh</span>
+                                <div class="terminal-tabs">
+                                    <div class="terminal-tab active">send_message.php</div>
+                                </div>
                             </div>
                             <div class="terminal-content">
                                 <form class="space-y-6" id="contact-form">
                                     <div>
-                                        <label for="name" class="block text-sm font-medium text-terminal-green mb-2">NAME:</label>
-                                        <input type="text" id="name" name="name" class="w-full px-4 py-3 bg-terminal-bg border-2 border-terminal-green text-terminal-green font-mono focus:border-terminal-green-bright focus:outline-none transition-all duration-300" required>
+                                        <label for="name" class="block text-sm font-medium text-terminal-green mb-2">$name =</label>
+                                        <input type="text" id="name" name="name" class="w-full px-4 py-3 bg-terminal-surface border border-terminal-overlay text-terminal-text font-mono focus:border-terminal-green focus:outline-none transition-all duration-300 rounded-lg" required>
                                     </div>
                                     <div>
-                                        <label for="email" class="block text-sm font-medium text-terminal-green mb-2">EMAIL:</label>
-                                        <input type="email" id="email" name="email" class="w-full px-4 py-3 bg-terminal-bg border-2 border-terminal-green text-terminal-green font-mono focus:border-terminal-green-bright focus:outline-none transition-all duration-300" required>
+                                        <label for="email" class="block text-sm font-medium text-terminal-blue mb-2">$email =</label>
+                                        <input type="email" id="email" name="email" class="w-full px-4 py-3 bg-terminal-surface border border-terminal-overlay text-terminal-text font-mono focus:border-terminal-blue focus:outline-none transition-all duration-300 rounded-lg" required>
                                     </div>
                                     <div>
-                                        <label for="message" class="block text-sm font-medium text-terminal-green mb-2">MESSAGE:</label>
-                                        <textarea id="message" name="message" rows="4" class="w-full px-4 py-3 bg-terminal-bg border-2 border-terminal-green text-terminal-green font-mono focus:border-terminal-green-bright focus:outline-none transition-all duration-300" required></textarea>
+                                        <label for="message" class="block text-sm font-medium text-terminal-purple mb-2">$message =</label>
+                                        <textarea id="message" name="message" rows="4" class="w-full px-4 py-3 bg-terminal-surface border border-terminal-overlay text-terminal-text font-mono focus:border-terminal-purple focus:outline-none transition-all duration-300 rounded-lg" required></textarea>
                                     </div>
-                                    <button type="submit" class="w-full btn-terminal">
-                                        SEND_MESSAGE
+                                    <button type="submit" class="w-full btn-modern">
+                                        🚀 Execute Send
                                     </button>
                                 </form>
                             </div>
                         </div>
                     </div>
                 </div>
+                <div class="status-bar">
+                    <div class="status-indicator">
+                        <div class="status-dot"></div>
+                        <span>Ready to connect</span>
+                    </div>
+                    <div class="text-xs">Response time: &lt; 24h</div>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-terminal-bg border-t-2 border-terminal-green py-8">
+    <footer class="bg-terminal-bg border-t border-terminal-overlay py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center animate-fade-in">
-                <p class="text-terminal-green font-mono">
-                    © <span id="current-year"></span> Remilekun Arowosaye (Cyberwizard) | Built with passion for clean code and robust systems
-                </p>
+            <div class="modern-terminal animate-fade-in">
+                <div class="terminal-content text-center">
+                    <div class="syntax-highlight">
+                        <span class="comment">// © </span><span id="current-year"></span><span class="comment"> Remilekun Arowosaye (Cyberwizard)</span><br/>
+                        <span class="comment">// Built with passion for clean code and robust systems</span>
+                    </div>
+                </div>
             </div>
         </div>
     </footer>
@@ -923,22 +1169,6 @@
         // Set current year
         document.getElementById('current-year').textContent = new Date().getFullYear();
 
-        // Create matrix rain effect
-        function createMatrixRain() {
-            const matrixBg = document.getElementById('matrix-bg');
-            const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
-            
-            for (let i = 0; i < 50; i++) {
-                const char = document.createElement('div');
-                char.className = 'matrix-char';
-                char.textContent = chars[Math.floor(Math.random() * chars.length)];
-                char.style.left = Math.random() * 100 + '%';
-                char.style.animationDelay = Math.random() * 20 + 's';
-                char.style.animationDuration = (Math.random() * 10 + 10) + 's';
-                matrixBg.appendChild(char);
-            }
-        }
-
         // Loading screen
         window.addEventListener('load', () => {
             const loadingOverlay = document.getElementById('loading-overlay');
@@ -946,7 +1176,6 @@
                 loadingOverlay.style.opacity = '0';
                 setTimeout(() => {
                     loadingOverlay.style.display = 'none';
-                    createMatrixRain();
                 }, 500);
             }, 2000);
         });
@@ -1036,21 +1265,21 @@
         document.getElementById('contact-form').addEventListener('submit', function(e) {
             e.preventDefault();
             const button = this.querySelector('button[type="submit"]');
-            const originalText = button.textContent;
+            const originalText = button.innerHTML;
             
             // Animate button
-            button.textContent = 'SENDING...';
+            button.innerHTML = '⏳ Executing...';
             button.classList.add('animate-pulse');
             
             // Simulate form submission
             setTimeout(() => {
-                button.textContent = 'MESSAGE_SENT!';
+                button.innerHTML = '✅ Message Sent!';
                 button.classList.remove('animate-pulse');
                 
                 // Show success message
                 const successMessage = document.createElement('div');
-                successMessage.className = 'mt-4 p-4 border-2 border-terminal-green text-terminal-green text-center animate-fade-in';
-                successMessage.textContent = 'Thank you for your message! I\'ll get back to you soon.';
+                successMessage.className = 'mt-4 p-4 bg-terminal-surface border border-terminal-green text-terminal-green text-center animate-fade-in rounded-lg';
+                successMessage.innerHTML = '<span class="syntax-highlight"><span class="comment">// Success: Message delivered successfully!</span></span>';
                 this.appendChild(successMessage);
                 
                 // Reset form
@@ -1058,7 +1287,7 @@
                 
                 // Reset button after delay
                 setTimeout(() => {
-                    button.textContent = originalText;
+                    button.innerHTML = originalText;
                     successMessage.remove();
                 }, 3000);
             }, 2000);
@@ -1102,6 +1331,45 @@
 
         typingElements.forEach(el => {
             typingObserver.observe(el);
+        });
+
+        // Terminal tab switching animation
+        document.querySelectorAll('.terminal-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Remove active class from siblings
+                this.parentElement.querySelectorAll('.terminal-tab').forEach(t => t.classList.remove('active'));
+                // Add active class to clicked tab
+                this.classList.add('active');
+            });
+        });
+
+        // Add subtle parallax effect to terminal windows
+        window.addEventListener('scroll', () => {
+            const terminals = document.querySelectorAll('.modern-terminal');
+            const scrolled = window.pageYOffset;
+            
+            terminals.forEach((terminal, index) => {
+                const rate = scrolled * -0.02 * (index + 1);
+                terminal.style.transform = `translateY(${rate}px)`;
+            });
+        });
+
+        // Terminal window controls functionality
+        document.querySelectorAll('.terminal-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const terminal = this.closest('.modern-terminal');
+                
+                if (this.classList.contains('close')) {
+                    terminal.style.opacity = '0.5';
+                    setTimeout(() => terminal.style.opacity = '1', 500);
+                } else if (this.classList.contains('minimize')) {
+                    terminal.style.transform = 'scale(0.95)';
+                    setTimeout(() => terminal.style.transform = 'scale(1)', 300);
+                } else if (this.classList.contains('maximize')) {
+                    terminal.style.transform = 'scale(1.02)';
+                    setTimeout(() => terminal.style.transform = 'scale(1)', 300);
+                }
+            });
         });
     </script>
 </body>
