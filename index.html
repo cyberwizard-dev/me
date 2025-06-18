@@ -4,31 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Remilekun Arowosaye - Backend Developer | Cyberwizard</title>
-    <meta name="description" content="Backend Developer with 13+ years experience in PHP, Laravel, Node.js, and DevOps. Specializing in wallet systems, management software, and open source contributions.">
+    <meta name="description" content="Backend Developer with 13+ years experience in PHP, Laravel, Node.js, and DevOps. Founder of CharityChest. Specializing in wallet systems, management software, and open source contributions.">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        'terminal': {
-                            'bg': '#1e1e2e',
-                            'surface': '#313244',
-                            'overlay': '#45475a',
-                            'text': '#cdd6f4',
-                            'subtext': '#a6adc8',
-                            'green': '#a6e3a1',
-                            'blue': '#89b4fa',
-                            'yellow': '#f9e2af',
-                            'red': '#f38ba8',
-                            'purple': '#cba6f7',
-                            'pink': '#f5c2e7',
-                            'teal': '#94e2d5',
-                            'orange': '#fab387'
+                        'night': {
+                            50: '#f8fafc',
+                            100: '#f1f5f9', 
+                            200: '#e2e8f0',
+                            300: '#cbd5e1',
+                            400: '#94a3b8',
+                            500: '#64748b',
+                            600: '#475569',
+                            700: '#1f2937',
+                            800: '#111827',
+                            900: '#0f172a',
+                            950: '#000000'
+                        },
+                        'emerald': {
+                            400: '#34d399',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857'
                         }
-                    },
-                    fontFamily: {
-                        'mono': ['JetBrains Mono', 'Fira Code', 'Monaco', 'Consolas', 'monospace']
                     },
                     animation: {
                         'fade-in': 'fadeIn 0.6s ease-out forwards',
@@ -41,9 +42,7 @@
                         'float': 'float 3s ease-in-out infinite',
                         'typing': 'typing 3.5s steps(40, end), blink-caret .75s step-end infinite',
                         'typing-slow': 'typing 4s steps(50, end), blink-caret .75s step-end infinite',
-                        'typing-fast': 'typing 2s steps(30, end), blink-caret .75s step-end infinite',
-                        'gradient-shift': 'gradientShift 3s ease-in-out infinite',
-                        'slide-up': 'slideUp 0.3s ease-out forwards'
+                        'typing-fast': 'typing 2s steps(30, end), blink-caret .75s step-end infinite'
                     }
                 }
             }
@@ -51,251 +50,106 @@
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { 
-            font-family: 'JetBrains Mono', monospace; 
+            font-family: 'Inter', sans-serif; 
             overflow-x: hidden;
-            background: #1e1e2e;
-            color: #cdd6f4;
+            background: #000000;
         }
         
-        .modern-terminal {
-            background: linear-gradient(145deg, #1e1e2e 0%, #181825 100%);
-            border-radius: 12px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(205, 214, 244, 0.1);
-            backdrop-filter: blur(20px);
+        .gradient-text {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
         }
         
-        .terminal-header {
-            background: linear-gradient(135deg, #313244 0%, #45475a 100%);
-            padding: 12px 20px;
-            border-radius: 12px 12px 0 0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid rgba(205, 214, 244, 0.1);
+        .card-hover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.1), transparent);
+            transition: left 0.5s;
         }
         
-        .terminal-tabs {
-            display: flex;
-            gap: 8px;
+        .card-hover:hover::before {
+            left: 100%;
         }
         
-        .terminal-tab {
-            background: rgba(205, 214, 244, 0.1);
-            color: #a6adc8;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            border: 1px solid transparent;
+        .card-hover:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
         }
         
-        .terminal-tab.active {
-            background: rgba(166, 227, 161, 0.2);
-            color: #a6e3a1;
-            border-color: rgba(166, 227, 161, 0.3);
-        }
-        
-        .terminal-controls {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-        
-        .terminal-button {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
-        
-        .terminal-button.close { background: #f38ba8; }
-        .terminal-button.minimize { background: #f9e2af; }
-        .terminal-button.maximize { background: #a6e3a1; }
-        
-        .terminal-button:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 8px currentColor;
-        }
-        
-        .terminal-content {
-            padding: 24px;
-            background: rgba(30, 30, 46, 0.8);
-            border-radius: 0 0 12px 12px;
+        .skill-bar {
             position: relative;
+            overflow: hidden;
         }
         
-        .prompt {
-            color: #a6e3a1;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
+        .skill-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
         }
         
-        .prompt::before {
-            content: "❯";
-            color: #89b4fa;
-            font-weight: bold;
+        .btn-glow {
+            position: relative;
+            overflow: hidden;
         }
         
-        .command {
-            color: #89b4fa;
-            font-weight: 500;
+        .btn-glow::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.2), transparent);
+            transition: left 0.5s;
         }
         
-        .output {
-            color: #cdd6f4;
-            margin-left: 24px;
-            line-height: 1.6;
-        }
-        
-        .syntax-highlight .keyword { color: #cba6f7; }
-        .syntax-highlight .string { color: #a6e3a1; }
-        .syntax-highlight .number { color: #fab387; }
-        .syntax-highlight .comment { color: #6c7086; font-style: italic; }
-        .syntax-highlight .function { color: #89b4fa; }
-        .syntax-highlight .variable { color: #f5c2e7; }
-        
-        .ascii-art {
-            font-family: 'JetBrains Mono', monospace;
-            color: #89b4fa;
-            white-space: pre;
-            line-height: 1.1;
-            text-shadow: 0 0 10px rgba(137, 180, 250, 0.3);
+        .btn-glow:hover::before {
+            left: 100%;
         }
         
         .typing-animation {
-            border-right: 2px solid #a6e3a1;
+            border-right: 2px solid #10b981;
             white-space: nowrap;
             overflow: hidden;
             animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
         }
-
         .typing-slow {
-            border-right: 2px solid #a6e3a1;
+            border-right: 2px solid #10b981;
             white-space: nowrap;
             overflow: hidden;
             animation: typing-slow 4s steps(50, end), blink-caret .75s step-end infinite;
         }
-
         .typing-fast {
-            border-right: 2px solid #a6e3a1;
+            border-right: 2px solid #10b981;
             white-space: nowrap;
             overflow: hidden;
             animation: typing-fast 2s steps(30, end), blink-caret .75s step-end infinite;
         }
-        
-        .card-hover {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
+        .typing-medium {
+            border-right: 2px solid #10b981;
+            white-space: nowrap;
             overflow: hidden;
-        }
-        
-        .card-hover:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(166, 227, 161, 0.2);
-        }
-        
-        .skill-bar {
-            background: #45475a;
-            height: 6px;
-            border-radius: 3px;
-            overflow: hidden;
-            position: relative;
-        }
-        
-        .skill-fill {
-            height: 100%;
-            border-radius: 3px;
-            position: relative;
-            transition: width 1s ease-out;
-        }
-        
-        .skill-fill.php { background: linear-gradient(90deg, #777bb4, #8892bf); }
-        .skill-fill.laravel { background: linear-gradient(90deg, #ff2d20, #ff5722); }
-        .skill-fill.nodejs { background: linear-gradient(90deg, #339933, #68cc68); }
-        .skill-fill.go { background: linear-gradient(90deg, #00add8, #5dc9e2); }
-        .skill-fill.vue { background: linear-gradient(90deg, #4fc08d, #42b883); }
-        .skill-fill.javascript { background: linear-gradient(90deg, #f7df1e, #ffeb3b); }
-        
-        .skill-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            animation: shimmer 2s infinite;
-        }
-        
-        .btn-modern {
-            background: linear-gradient(135deg, #313244 0%, #45475a 100%);
-            border: 1px solid rgba(166, 227, 161, 0.3);
-            color: #a6e3a1;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-family: 'JetBrains Mono', monospace;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            backdrop-filter: blur(10px);
-        }
-        
-        .btn-modern:hover {
-            background: linear-gradient(135deg, #a6e3a1 0%, #94e2d5 100%);
-            color: #1e1e2e;
-            border-color: #a6e3a1;
-            box-shadow: 0 8px 25px rgba(166, 227, 161, 0.3);
-            transform: translateY(-2px);
-        }
-        
-        .btn-modern::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
-        }
-        
-        .btn-modern:hover::before {
-            left: 100%;
-        }
-        
-        .status-bar {
-            background: rgba(49, 50, 68, 0.8);
-            padding: 8px 20px;
-            font-size: 12px;
-            color: #a6adc8;
-            border-top: 1px solid rgba(205, 214, 244, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .status-indicator {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        
-        .status-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: #a6e3a1;
-            animation: pulse 2s infinite;
+            animation: typing-medium 3s steps(35, end), blink-caret .75s step-end infinite;
         }
         
         /* Scroll animations */
@@ -371,17 +225,6 @@
             }
         }
         
-        @keyframes slideUp {
-            from { 
-                opacity: 0; 
-                transform: translateY(20px); 
-            }
-            to { 
-                opacity: 1; 
-                transform: translateY(0); 
-            }
-        }
-        
         @keyframes bounceIn {
             0% { 
                 opacity: 0; 
@@ -402,16 +245,11 @@
         
         @keyframes pulseGlow {
             0%, 100% { 
-                box-shadow: 0 0 20px rgba(166, 227, 161, 0.3); 
+                box-shadow: 0 0 20px rgba(16, 185, 129, 0.5); 
             }
             50% { 
-                box-shadow: 0 0 40px rgba(166, 227, 161, 0.6); 
+                box-shadow: 0 0 40px rgba(16, 185, 129, 0.8); 
             }
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
         }
         
         @keyframes float {
@@ -433,24 +271,34 @@
             to { width: 100%; }
         }
         
+        @keyframes typing-slow {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        
+        @keyframes typing-fast {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        
+        @keyframes typing-medium {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        
         @keyframes blink-caret {
             from, to { border-color: transparent; }
-            50% { border-color: #a6e3a1; }
+            50% { border-color: #10b981; }
         }
         
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-        
-        /* Loading animation */
+        /* Loading animation - simplified */
         .loading-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #1e1e2e 0%, #181825 100%);
+            background: #000000;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -458,751 +306,579 @@
             transition: opacity 0.5s ease-out;
         }
         
-        .loading-content {
-            text-align: center;
-            padding: 40px;
-            background: rgba(49, 50, 68, 0.8);
-            border-radius: 12px;
-            border: 1px solid rgba(166, 227, 161, 0.2);
-            backdrop-filter: blur(20px);
-        }
-        
         .loading-spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid rgba(166, 227, 161, 0.3);
-            border-top: 3px solid #a6e3a1;
+            width: 50px;
+            height: 50px;
+            border: 3px solid #111827;
+            border-top: 3px solid #10b981;
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
         }
         
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        
-        /* Navigation styling */
-        .nav-modern {
-            background: rgba(30, 30, 46, 0.95);
-            border-bottom: 1px solid rgba(205, 214, 244, 0.1);
-            backdrop-filter: blur(20px);
-        }
-        
-        .nav-link {
-            color: #a6adc8;
-            transition: all 0.3s ease;
+        .section-bg {
+            background: linear-gradient(135deg, #0f172a 0%, #111827 50%, #000000 100%);
             position: relative;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: 500;
         }
-        
-        .nav-link:hover {
-            color: #a6e3a1;
-            background: rgba(166, 227, 161, 0.1);
-        }
-        
-        .nav-link::after {
+        .section-bg::before {
             content: '';
             position: absolute;
-            bottom: -4px;
-            left: 50%;
-            width: 0;
-            height: 2px;
-            background: #a6e3a1;
-            transition: all 0.3s ease;
-            transform: translateX(-50%);
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23334155" fill-opacity="0.05"%3E%3Ccircle cx="30" cy="30" r="1"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E') repeat;
+            z-index: 0;
         }
-        
-        .nav-link:hover::after {
-            width: 80%;
+        .section-content {
+            position: relative;
+            z-index: 1;
         }
-        
-        /* Mobile menu animation */
-        .mobile-menu-enter {
-            transform: translateY(-100%);
-            opacity: 0;
-        }
-        
-        .mobile-menu-enter-active {
-            transform: translateY(0);
-            opacity: 1;
-            transition: all 0.3s ease-out;
-        }
-        
-        .mobile-menu-exit {
-            transform: translateY(0);
-            opacity: 1;
-        }
-        
-        .mobile-menu-exit-active {
-            transform: translateY(-100%);
-            opacity: 0;
-            transition: all 0.3s ease-in;
-        }
-        
-        /* Scrollbar styling */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        ::-webkit-scrollbar-track {
-            background: #1e1e2e;
-        }
-        
-        ::-webkit-scrollbar-thumb {
-            background: #45475a;
-            border-radius: 4px;
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-            background: #585b70;
-        }
-        
-        /* Selection styling */
-        ::selection {
-            background: rgba(166, 227, 161, 0.3);
-            color: #cdd6f4;
+        /* Hide loading screen initially, show content */
+        .content-hidden {
+            display: none;
         }
     </style>
 </head>
-<body class="bg-terminal-bg text-terminal-text font-mono antialiased">
+<body class="bg-night-950 text-gray-100 antialiased">
     <!-- Loading Screen -->
     <div id="loading-overlay" class="loading-overlay">
-        <div class="loading-content">
-            <div class="loading-spinner"></div>
-            <div class="text-terminal-green text-lg font-semibold mb-2">Initializing Terminal</div>
-            <div class="text-terminal-subtext text-sm">Loading cyberwizard environment...</div>
+        <div class="text-center">
+            <div class="loading-spinner mx-auto mb-4"></div>
+            <div class="gradient-text text-xl font-semibold">Loading Portfolio...</div>
         </div>
     </div>
-
-    <!-- Navigation -->
-    <nav class="fixed top-0 w-full nav-modern z-50 transition-all duration-300">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center py-4">
-                <div class="text-lg font-bold text-terminal-green animate-fade-in-left flex items-center gap-2">
-                    <span class="text-terminal-blue">❯</span>
-                    <span class="text-terminal-purple">cyberwizard</span>
-                    <span class="text-terminal-subtext">@terminal</span>
-                </div>
-                <div class="hidden md:flex space-x-2">
-                    <a href="#home" class="nav-link">home</a>
-                    <a href="#about" class="nav-link">about</a>
-                    <a href="#skills" class="nav-link">skills</a>
-                    <a href="#experience" class="nav-link">experience</a>
-                    <a href="#projects" class="nav-link">projects</a>
-                    <a href="#contact" class="nav-link">contact</a>
-                </div>
-                <button id="mobile-menu-btn" class="md:hidden text-terminal-text hover:text-terminal-green transition-colors">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
-                </button>
-            </div>
-        </div>
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-terminal-surface border-t border-terminal-overlay mobile-menu-enter">
-            <div class="px-2 pt-2 pb-3 space-y-1">
-                <a href="#home" class="block nav-link">home</a>
-                <a href="#about" class="block nav-link">about</a>
-                <a href="#skills" class="block nav-link">skills</a>
-                <a href="#experience" class="block nav-link">experience</a>
-                <a href="#projects" class="block nav-link">projects</a>
-                <a href="#contact" class="block nav-link">contact</a>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section id="home" class="min-h-screen flex items-center justify-center relative overflow-hidden py-20">
-        <div class="relative z-10 text-center max-w-6xl mx-auto px-4">
-            <div class="modern-terminal animate-fade-in-up">
-                <div class="terminal-header">
-                    <div class="terminal-tabs">
-                        <div class="terminal-tab active">cyberwizard.sh</div>
-                        <div class="terminal-tab">portfolio.md</div>
-                        <div class="terminal-tab">skills.json</div>
-                    </div>
-                    <div class="terminal-controls">
-                        <div class="terminal-button close"></div>
-                        <div class="terminal-button minimize"></div>
-                        <div class="terminal-button maximize"></div>
-                    </div>
-                </div>
-                <div class="terminal-content">
-                    <div class="ascii-art mb-8 text-center">
-   ▄████▄▓██   ██▓ ▄▄▄▄   ▓█████  ██▀███   █     █░ ██▓▒███████▒ ▄▄▄       ██▀███  ▓█████▄ 
-  ▒██▀ ▀█ ▒██  ██▒▓█████▄ ▓█   ▀ ▓██ ▒ ██▒▓█░ █ ░█░▓██▒▒ ▒ ▒ ▄▀░▒████▄    ▓██ ▒ ██▒▒██▀ ██▌
-  ▒▓█    ▄ ▒██ ██░▒██▒ ▄██▒███   ▓██ ░▄█ ▒▒█░ █ ░█ ▒██▒░ ▒ ▄▀▒░ ▒██  ▀█▄  ▓██ ░▄█ ▒░██   █▌
-  ▒▓▓▄ ▄██▒░ ▐██▓░▒██░█▀  ▒▓█  ▄ ▒██▀▀█▄  ░█░ █ ░█ ░██░  ▄▀▒   ░░██▄▄▄▄██ ▒██▀▀█▄  ░▓█▄   ▌
-  ▒ ▓███▀ ░░ ██▒▓░░▓█  ▀█▓░▒████▒░██▓ ▒██▒░░██▒██▓ ░██░▒███████▒ ▓█   ▓██▒░██▓ ▒██▒░▒████▓ 
-  ░ ░▒ ▒  ░ ██▒▒▒ ░▒▓███▀▒░░ ▒░ ░░ ▒▓ ░▒▓░░ ▓░▒ ▒  ░▓  ░▒▒ ▓░▒░▒ ▒▒   ▓▒█░░ ▒▓ ░▒▓░ ▒▒▓  ▒ 
-    ░  ▒  ▓██ ░▒░ ▒░▒   ░  ░ ░  ░  ░▒ ░ ▒░  ▒ ░ ░   ▒ ░░░▒ ▒ ░ ▒  ▒   ▒▒ ░  ░▒ ░ ▒░ ░ ▒  ▒ 
-  ░       ▒ ▒ ░░   ░    ░    ░     ░░   ░   ░   ░   ▒ ░░ ░ ░ ░ ░  ░   ▒     ░░   ░  ░ ░  ░ 
-  ░ ░     ░ ░      ░         ░  ░   ░         ░     ░    ░ ░          ░  ░   ░        ░    
-  ░       ░ ░           ░                                ░                           ░      
-                    </div>
-                    
-                    <div class="space-y-4 text-left max-w-4xl mx-auto">
-                        <div class="flex items-center gap-2">
-                            <span class="prompt typing-animation">whoami</span>
-                        </div>
-                        <div class="output syntax-highlight" style="animation-delay: 4s;">
-                            <div class="typing-slow animate-slide-up" style="animation-delay: 4.5s;">
-                                <span class="string">Remilekun Arowosaye</span> <span class="comment"># Also known as Cyberwizard</span>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-center gap-2" style="animation-delay: 8s;">
-                            <span class="prompt typing-fast" style="animation-delay: 8s;">cat ~/.config/role</span>
-                        </div>
-                        <div class="output syntax-highlight" style="animation-delay: 10s;">
-                            <div class="typing-animation animate-slide-up" style="animation-delay: 10.5s;">
-                                <span class="keyword">role:</span> <span class="string">"Backend Developer & DevOps Engineer"</span>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-center gap-2" style="animation-delay: 14s;">
-                            <span class="prompt typing-fast" style="animation-delay: 14s;">grep -r "experience" ~/career/</span>
-                        </div>
-                        <div class="output syntax-highlight" style="animation-delay: 16s;">
-                            <div class="space-y-1">
-                                <div class="typing-slow animate-slide-up" style="animation-delay: 16.5s;">
-                                    <span class="variable">years_experience:</span> <span class="number">13+</span>
-                                </div>
-                                <div class="typing-slow animate-slide-up" style="animation-delay: 20s;">
-                                    <span class="variable">specialization:</span> <span class="string">"Wallet Systems & Enterprise Software"</span>
-                                </div>
-                                <div class="typing-slow animate-slide-up" style="animation-delay: 23.5s;">
-                                    <span class="variable">location:</span> <span class="string">"Abuja, Nigeria"</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center mt-12 animate-slide-in-bottom" style="animation-delay: 27s;">
-                        <a href="mailto:eminibest@gmail.com?subject=Project Inquiry&body=Hi Remilekun, I'd like to discuss a project with you." class="btn-modern">
-                            📧 Send Email
+    <!-- Main Content -->
+    <div id="main-content">
+        <!-- Navigation -->
+        <nav class="fixed top-0 w-full bg-night-950/80 backdrop-blur-md border-b border-night-800 z-50 transition-all duration-300">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center py-4">
+                    <div class="text-xl font-bold gradient-text animate-fade-in-left">Cyberwizard</div>
+                    <div class="hidden md:flex space-x-8">
+                        <a href="#home" class="hover:text-emerald-400 transition-all duration-300 hover:scale-110 relative group">
+                            Home
+                            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-400 transition-all duration-300 group-hover:w-full"></span>
                         </a>
-                        <a href="https://wa.me/2347085307378?text=Hi%20Remilekun,%20I'd%20like%20to%20discuss%20a%20project%20with%20you." target="_blank" class="btn-modern">
-                            💬 WhatsApp
+                        <a href="#about" class="hover:text-emerald-400 transition-all duration-300 hover:scale-110 relative group">
+                            About
+                            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-400 transition-all duration-300 group-hover:w-full"></span>
                         </a>
-                        <a href="https://github.com/cyberwizard-dev" target="_blank" class="btn-modern">
-                            🔗 GitHub
+                        <a href="#skills" class="hover:text-emerald-400 transition-all duration-300 hover:scale-110 relative group">
+                            Skills
+                            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-400 transition-all duration-300 group-hover:w-full"></span>
+                        </a>
+                        <a href="#experience" class="hover:text-emerald-400 transition-all duration-300 hover:scale-110 relative group">
+                            Experience
+                            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-400 transition-all duration-300 group-hover:w-full"></span>
+                        </a>
+                        <a href="#projects" class="hover:text-emerald-400 transition-all duration-300 hover:scale-110 relative group">
+                            Projects
+                            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-400 transition-all duration-300 group-hover:w-full"></span>
+                        </a>
+                        <a href="#contact" class="hover:text-emerald-400 transition-all duration-300 hover:scale-110 relative group">
+                            Contact
+                            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-400 transition-all duration-300 group-hover:w-full"></span>
                         </a>
                     </div>
-                </div>
-                <div class="status-bar">
-                    <div class="status-indicator">
-                        <div class="status-dot"></div>
-                        <span>Connected</span>
-                    </div>
-                    <div class="flex gap-4 text-xs">
-                        <span>Ln 42, Col 1</span>
-                        <span>UTF-8</span>
-                        <span>Bash</span>
-                    </div>
+                    <button id="mobile-menu-btn" class="md:hidden transition-transform duration-300 hover:scale-110">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about" class="py-20 bg-terminal-bg">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="modern-terminal animate-on-scroll">
-                <div class="terminal-header">
-                    <div class="terminal-tabs">
-                        <div class="terminal-tab active">about.md</div>
-                        <div class="terminal-tab">journey.log</div>
-                    </div>
-                    <div class="terminal-controls">
-                        <div class="terminal-button close"></div>
-                        <div class="terminal-button minimize"></div>
-                        <div class="terminal-button maximize"></div>
-                    </div>
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden bg-night-900 border-t border-night-800">
+                <div class="px-2 pt-2 pb-3 space-y-1">
+                    <a href="#home" class="block px-3 py-2 hover:text-emerald-400 transition-all duration-300 hover:bg-night-800 rounded">Home</a>
+                    <a href="#about" class="block px-3 py-2 hover:text-emerald-400 transition-all duration-300 hover:bg-night-800 rounded">About</a>
+                    <a href="#skills" class="block px-3 py-2 hover:text-emerald-400 transition-all duration-300 hover:bg-night-800 rounded">Skills</a>
+                    <a href="#experience" class="block px-3 py-2 hover:text-emerald-400 transition-all duration-300 hover:bg-night-800 rounded">Experience</a>
+                    <a href="#projects" class="block px-3 py-2 hover:text-emerald-400 transition-all duration-300 hover:bg-night-800 rounded">Projects</a>
+                    <a href="#contact" class="block px-3 py-2 hover:text-emerald-400 transition-all duration-300 hover:bg-night-800 rounded">Contact</a>
                 </div>
-                <div class="terminal-content">
-                    <div class="grid md:grid-cols-2 gap-12">
-                        <div>
-                            <div class="prompt typing-slow">cat about.md</div>
-                            <div class="output mt-6 space-y-4 syntax-highlight">
-                                <p class="leading-relaxed">
-                                    <span class="comment"># The Journey</span><br/>
-                                    With over <span class="number">13</span> years in backend development, I've architected and built systems that handle millions of transactions, manage thousands of users, and power critical business operations.
+            </div>
+        </nav>
+        <!-- Hero Section -->
+        <section id="home" class="min-h-screen flex items-center justify-center relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-night-900 via-night-950 to-black"></div>
+            <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23334155" fill-opacity="0.1"%3E%3Ccircle cx="30" cy="30" r="1"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-20"></div>
+            
+            <!-- Floating particles -->
+            <div class="absolute inset-0 overflow-hidden">
+                <div class="absolute top-1/4 left-1/4 w-2 h-2 bg-emerald-400 rounded-full animate-float opacity-60"></div>
+                <div class="absolute top-1/3 right-1/4 w-1 h-1 bg-emerald-500 rounded-full animate-float opacity-40" style="animation-delay: 1s;"></div>
+                <div class="absolute bottom-1/4 left-1/3 w-1.5 h-1.5 bg-emerald-300 rounded-full animate-float opacity-50" style="animation-delay: 2s;"></div>
+                <div class="absolute bottom-1/3 right-1/3 w-1 h-1 bg-emerald-600 rounded-full animate-float opacity-30" style="animation-delay: 0.5s;"></div>
+            </div>
+            
+            <div class="relative z-10 text-center max-w-5xl mx-auto px-4">
+                <h1 class="text-5xl md:text-7xl font-bold mb-6 animate-fade-in-up">
+                    <span class="gradient-text">Remilekun</span><br>
+                    <span class="text-white">Arowosaye</span>
+                </h1>
+                <div class="text-xl md:text-2xl text-gray-300 mb-4 animate-fade-in-up" style="animation-delay: 0.2s;">
+                    <span class="typing-animation">Backend Developer & DevOps Engineer</span>
+                </div>
+                <div class="text-lg md:text-xl text-emerald-400 mb-8 animate-fade-in-up" style="animation-delay: 0.4s;">
+                    <span class="typing-slow">Founder of CharityChest</span>
+                </div>
+                <p class="text-lg text-gray-400 mb-12 max-w-3xl mx-auto animate-fade-in-up" style="animation-delay: 0.6s;">
+                    Graduate of <span class="text-emerald-400 font-semibold">Physics and Material Science</span>, leveraging 13+ years of expertise in crafting enterprise-grade backend solutions. Specializing in high-performance wallet systems, scalable management platforms, and mission-critical software architecture.
+                    Founder of <span class="text-emerald-400 font-semibold">CharityChest</span> - an innovative platform revolutionizing charitable giving through seamless digital solutions for small to large-scale donations and giveaways.
+                    Recognized in the tech community as <span class="text-emerald-400 font-semibold">Cyberwizard</span>, bringing scientific precision to software engineering.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center animate-slide-in-bottom" style="animation-delay: 0.8s;">
+                    <a href="https://drive.google.com/file/d/1rlOlmQWAfA5-DTv5BXPV6ffcuO7SldTz/view?usp=sharing" target="_blank" class="bg-gradient-to-r from-emerald-600 to-emerald-400 hover:from-emerald-700 hover:to-emerald-500 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 btn-glow animate-pulse-glow">
+                        📄 View Resume
+                    </a>
+                    <a href="mailto:eminibest@gmail.com?subject=Project Inquiry&body=Hi Remilekun, I'd like to discuss a project with you." class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 btn-glow">
+                        📧 Email Me
+                    </a>
+                    <a href="https://wa.me/2347085307378?text=Hi%20Remilekun,%20I'd%20like%20to%20discuss%20a%20project%20with%20you." target="_blank" class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 btn-glow">
+                        💬 WhatsApp
+                    </a>
+                    <a href="https://github.com/cyberwizard-dev" target="_blank" class="border border-gray-600 hover:border-emerald-400 text-gray-300 hover:text-emerald-400 px-8 py-3 rounded-lg font-semibold transition-all duration-300 hover:bg-emerald-400/10">
+                        🔗 GitHub
+                    </a>
+                </div>
+            </div>
+        </section>
+        <!-- About Section -->
+        <section id="about" class="py-20 section-bg">
+            <div class="section-content">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-16 animate-on-scroll">
+                        <h2 class="text-4xl font-bold mb-4">About Me</h2>
+                        <div class="w-24 h-1 bg-gradient-to-r from-emerald-600 to-emerald-400 mx-auto"></div>
+                    </div>
+                    <div class="grid lg:grid-cols-3 gap-12">
+                        <!-- Main About Content -->
+                        <div class="lg:col-span-2 animate-on-scroll">
+                            <h3 class="text-3xl font-semibold mb-6 gradient-text typing-slow">The Journey</h3>
+                            <div class="space-y-6 text-gray-300 leading-relaxed"></div>
+                                <p class="text-lg">
+                                    With a solid foundation in <span class="text-emerald-400 font-semibold">Physics and Material Science</span> and over <span class="text-emerald-400 font-semibold">13 years</span> in backend development, I've architected and built systems that handle millions of transactions, manage thousands of users, and power critical business operations. My scientific background provides me with analytical thinking and problem-solving skills that I apply to complex software engineering challenges.
                                 </p>
-                                <p class="leading-relaxed">
-                                    My expertise spans from traditional <span class="keyword">PHP/Laravel</span> applications to modern <span class="keyword">Node.js</span> services and emerging <span class="keyword">Go</span> technologies. I specialize in creating robust, scalable solutions for complex business problems.
+                                <p>
+                                    As the <span class="text-emerald-400 font-semibold">Founder of CharityChest</span>, I've created an innovative online development platform that enables organizations to perform large-scale giveaways efficiently. This platform demonstrates my ability to identify market needs and build comprehensive solutions that serve real-world problems.
                                 </p>
-                                <p class="leading-relaxed">
-                                    Beyond coding, I'm passionate about <span class="function">DevOps</span> practices, containerization, and continuous integration. I believe in building maintainable, deployable, and scalable systems.
+                                <p>
+                                    I specialize in creating robust, scalable solutions for complex business problems - from financial wallet systems that require absolute reliability to comprehensive management platforms that streamline operations for organizations. My work has consistently focused on building systems that not only function well but scale gracefully under pressure.
+                                </p>
+                                <p>
+                                    Beyond coding, I'm passionate about DevOps practices, containerization, and continuous integration. I believe in building not just functional software, but maintainable, deployable, and scalable systems that stand the test of time.
                                 </p>
                             </div>
                         </div>
                         
+                        <!-- Side Cards -->
                         <div class="space-y-6">
-                            <div class="modern-terminal card-hover stagger-animation">
-                                <div class="terminal-header">
-                                    <div class="terminal-tabs">
-                                        <div class="terminal-tab active typing-fast">expertise.json</div>
+                            <!-- CharityChest Card -->
+                            <div class="bg-gradient-to-br from-emerald-900/30 to-emerald-800/20 p-6 rounded-lg card-hover stagger-animation border border-emerald-500/20">
+                                <div class="flex items-center mb-4">
+                                    <div class="w-12 h-12 bg-emerald-500 rounded-lg flex items-center justify-center mr-4">
+                                        <span class="text-2xl">🎁</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-xl font-semibold text-emerald-400">CharityChest</h4>
+                                        <p class="text-sm text-gray-400">Founder & Creator</p>
                                     </div>
                                 </div>
-                                <div class="terminal-content">
-                                    <div class="syntax-highlight text-sm space-y-2">
-                                        <div><span class="string">"backend_architecture"</span>: <span class="keyword">true</span>,</div>
-                                        <div><span class="string">"financial_systems"</span>: <span class="keyword">true</span>,</div>
-                                        <div><span class="string">"enterprise_software"</span>: <span class="keyword">true</span>,</div>
-                                        <div><span class="string">"devops_cloud"</span>: <span class="keyword">true</span></div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="modern-terminal card-hover stagger-animation" style="animation-delay: 0.2s;">
-                                <div class="terminal-header">
-                                    <div class="terminal-tabs">
-                                        <div class="terminal-tab active typing-fast" style="animation-delay: 0.5s;">opensource.yml</div>
-                                    </div>
-                                </div>
-                                <div class="terminal-content">
-                                    <div class="syntax-highlight text-sm">
-                                        <span class="keyword">contribution:</span> <span class="string">"Active contributor to the developer community with multiple open source libraries and packages that help other developers build better applications."</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="status-bar">
-                    <div class="status-indicator">
-                        <div class="status-dot"></div>
-                        <span>File saved</span>
-                    </div>
-                    <div class="text-xs">Modified 2 minutes ago</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Skills Section -->
-    <section id="skills" class="py-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="modern-terminal animate-on-scroll">
-                <div class="terminal-header">
-                    <div class="terminal-tabs">
-                        <div class="terminal-tab active typing-fast">skills.json</div>
-                        <div class="terminal-tab">technologies.yml</div>
-                    </div>
-                    <div class="terminal-controls">
-                        <div class="terminal-button close"></div>
-                        <div class="terminal-button minimize"></div>
-                        <div class="terminal-button maximize"></div>
-                    </div>
-                </div>
-                <div class="terminal-content">
-                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                        <div class="stagger-animation">
-                            <div class="prompt typing-fast">./backend --list</div>
-                            <div class="output mt-4 space-y-4">
-                                <div class="flex justify-between items-center">
-                                    <span class="text-terminal-text">PHP</span>
-                                    <div class="w-32 skill-bar">
-                                        <div class="skill-fill php w-full transition-all duration-1000 ease-out"></div>
-                                    </div>
-                                </div>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-terminal-text">Laravel</span>
-                                    <div class="w-32 skill-bar">
-                                        <div class="skill-fill laravel w-full transition-all duration-1000 ease-out" style="animation-delay: 0.2s;"></div>
-                                    </div>
-                                </div>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-terminal-text">Node.js</span>
-                                    <div class="w-32 skill-bar">
-                                        <div class="skill-fill nodejs w-5/6 transition-all duration-1000 ease-out" style="animation-delay: 0.4s;"></div>
-                                    </div>
-                                </div>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-terminal-text">Go</span>
-                                    <div class="w-32 skill-bar">
-                                        <div class="skill-fill go w-2/3 transition-all duration-1000 ease-out" style="animation-delay: 0.6s;"></div>
-                                    </div>
-                                </div>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-terminal-text">Goravel</span>
-                                    <div class="w-32 skill-bar">
-                                        <div class="skill-fill go w-1/2 transition-all duration-1000 ease-out" style="animation-delay: 0.8s;"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="stagger-animation" style="animation-delay: 0.2s;">
-                            <div class="prompt typing-fast" style="animation-delay: 0.2s;">./frontend --show</div>
-                            <div class="output mt-4 space-y-4">
-                                <div class="flex justify-between items-center">
-                                    <span class="text-terminal-text">Vue.js</span>
-                                    <div class="w-32 skill-bar">
-                                        <div class="skill-fill vue w-5/6 transition-all duration-1000 ease-out"></div>
-                                    </div>
-                                </div>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-terminal-text">JavaScript</span>
-                                    <div class="w-32 skill-bar">
-                                        <div class="skill-fill javascript w-full transition-all duration-1000 ease-out" style="animation-delay: 0.2s;"></div>
-                                    </div>
-                                </div>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-terminal-text">HTML/CSS</span>
-                                    <div class="w-32 skill-bar">
-                                        <div class="skill-fill javascript w-full transition-all duration-1000 ease-out" style="animation-delay: 0.4s;"></div>
-                                    </div>
-                                </div>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-terminal-text">Tailwind</span>
-                                    <div class="w-32 skill-bar">
-                                        <div class="skill-fill vue w-5/6 transition-all duration-1000 ease-out" style="animation-delay: 0.6s;"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="stagger-animation" style="animation-delay: 0.4s;">
-                            <div class="prompt typing-fast" style="animation-delay: 0.4s;">./devops --tools</div>
-                            <div class="output mt-4 space-y-2 text-sm syntax-highlight">
-                                <div>• <span class="keyword">Docker</span> & Containerization</div>
-                                <div>• <span class="keyword">CI/CD</span> Pipelines</div>
-                                <div>• <span class="keyword">AWS</span>, <span class="keyword">GCP</span> Cloud</div>
-                                <div>• <span class="keyword">Kubernetes</span> Orchestration</div>
-                                <div>• <span class="keyword">Monitoring</span> & Logging</div>
-                                <div>• <span class="keyword">Infrastructure</span> as Code</div>
-                            </div>
-                        </div>
-                        
-                        <div class="stagger-animation" style="animation-delay: 0.6s;">
-                            <div class="prompt typing-fast" style="animation-delay: 0.6s;">./database --list</div>
-                            <div class="output mt-4 space-y-2 text-sm syntax-highlight">
-                                <div>• <span class="keyword">MySQL</span>, <span class="keyword">PostgreSQL</span></div>
-                                <div>• <span class="keyword">Redis</span>, <span class="keyword">MongoDB</span></div>
-                                <div>• <span class="keyword">RESTful</span> API Design</div>
-                                <div>• <span class="keyword">GraphQL</span> Implementation</div>
-                                <div>• <span class="keyword">Git</span> Version Control</div>
-                                <div>• <span class="keyword">Agile</span> Development</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="status-bar">
-                    <div class="status-indicator">
-                        <div class="status-dot"></div>
-                        <span>Skills loaded</span>
-                    </div>
-                    <div class="text-xs">Last updated: Today</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Experience Section -->
-    <section id="experience" class="py-20 bg-terminal-bg">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="modern-terminal animate-on-scroll">
-                <div class="terminal-header">
-                    <div class="terminal-tabs">
-                        <div class="terminal-tab active typing-slow">projects.log</div>
-                        <div class="terminal-tab">experience.md</div>
-                    </div>
-                    <div class="terminal-controls">
-                        <div class="terminal-button close"></div>
-                        <div class="terminal-button minimize"></div>
-                        <div class="terminal-button maximize"></div>
-                    </div>
-                </div>
-                <div class="terminal-content">
-                    <div class="space-y-8">
-                        <div class="modern-terminal card-hover stagger-animation">
-                            <div class="terminal-header">
-                                <div class="terminal-tabs">
-                                    <div class="terminal-tab active typing-slow">wallet_systems.md</div>
-                                </div>
-                            </div>
-                            <div class="terminal-content">
-                                <div class="syntax-highlight">
-                                    <h3 class="text-lg font-semibold mb-3 text-terminal-blue"># Financial Wallet Systems</h3>
-                                    <p class="mb-4 leading-relaxed">
-                                        Architected and developed secure, scalable wallet systems handling millions in transactions. Implemented multi-currency support, real-time balance tracking, and comprehensive audit trails with <span class="number">99.9%</span> uptime.
-                                    </p>
-                                    <div class="flex flex-wrap gap-2">
-                                        <span class="px-3 py-1 bg-terminal-surface border border-terminal-blue text-terminal-blue text-sm rounded">PHP</span>
-                                        <span class="px-3 py-1 bg-terminal-surface border border-terminal-red text-terminal-red text-sm rounded">Laravel</span>
-                                        <span class="px-3 py-1 bg-terminal-surface border border-terminal-green text-terminal-green text-sm rounded">MySQL</span>
-                                        <span class="px-3 py-1 bg-terminal-surface border border-terminal-purple text-terminal-purple text-sm rounded">Redis</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="modern-terminal card-hover stagger-animation" style="animation-delay: 0.2s;">
-                            <div class="terminal-header">
-                                <div class="terminal-tabs">
-                                    <div class="terminal-tab active typing-slow" style="animation-delay: 0.3s;">attendance_mgmt.md</div>
-                                </div>
-                            </div>
-                            <div class="terminal-content">
-                                <div class="syntax-highlight">
-                                    <h3 class="text-lg font-semibold mb-3 text-terminal-teal"># Attendance Management Systems</h3>
-                                    <p class="mb-4 leading-relaxed">
-                                        Built comprehensive attendance tracking solutions for enterprises, featuring biometric integration, automated reporting, and real-time analytics. Served organizations with <span class="number">10,000+</span> employees.
-                                    </p>
-                                    <div class="flex flex-wrap gap-2">
-                                        <span class="px-3 py-1 bg-terminal-surface border border-terminal-red text-terminal-red text-sm rounded">Laravel</span>
-                                        <span class="px-3 py-1 bg-terminal-surface border border-terminal-yellow text-terminal-yellow text-sm rounded">JavaScript</span>
-                                        <span class="px-3 py-1 bg-terminal-surface border border-terminal-blue text-terminal-blue text-sm rounded">PostgreSQL</span>
-                                        <span class="px-3 py-1 bg-terminal-surface border border-terminal-teal text-terminal-teal text-sm rounded">Docker</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="modern-terminal card-hover stagger-animation" style="animation-delay: 0.4s;">
-                            <div class="terminal-header">
-                                <div class="terminal-tabs">
-                                    <div class="terminal-tab active typing-slow" style="animation-delay: 0.6s;">hr_platform.md</div>
-                                </div>
-                            </div>
-                            <div class="terminal-content">
-                                <div class="syntax-highlight">
-                                    <h3 class="text-lg font-semibold mb-3 text-terminal-purple"># People Management Software</h3>
-                                    <p class="mb-4 leading-relaxed">
-                                        Developed enterprise-grade HR and people management platforms with features including employee onboarding, performance tracking, payroll integration, and advanced reporting capabilities.
-                                    </p>
-                                    <div class="flex flex-wrap gap-2">
-                                        <span class="px-3 py-1 bg-terminal-surface border border-terminal-green text-terminal-green text-sm rounded">Node.js</span>
-                                        <span class="px-3 py-1 bg-terminal-surface border border-terminal-blue text-terminal-blue text-sm rounded">Express</span>
-                                        <span class="px-3 py-1 bg-terminal-surface border border-terminal-orange text-terminal-orange text-sm rounded">MongoDB</span>
-                                        <span class="px-3 py-1 bg-terminal-surface border border-terminal-yellow text-terminal-yellow text-sm rounded">AWS</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="status-bar">
-                    <div class="status-indicator">
-                        <div class="status-dot"></div>
-                        <span>3 projects loaded</span>
-                    </div>
-                    <div class="text-xs">Total experience: 13+ years</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Projects Section -->
-    <section id="projects" class="py-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="modern-terminal animate-on-scroll">
-                <div class="terminal-header">
-                    <div class="terminal-tabs">
-                        <div class="terminal-tab active">github.com/cyberwizard-dev</div>
-                        <div class="terminal-tab">opensource.json</div>
-                    </div>
-                    <div class="terminal-controls">
-                        <div class="terminal-button close"></div>
-                        <div class="terminal-button minimize"></div>
-                        <div class="terminal-button maximize"></div>
-                    </div>
-                </div>
-                <div class="terminal-content">
-                    <div class="text-center mb-12">
-                        <div class="prompt mb-6">git log --oneline --graph --all</div>
-                        <p class="text-lg mb-8 text-terminal-subtext">
-                            I believe in giving back to the developer community through open source contributions and creating tools that help other developers build better applications.
-                        </p>
-                        <a href="https://github.com/cyberwizard-dev" target="_blank" class="btn-modern inline-flex items-center">
-                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 0C4.477 0 0 4.484 0 10.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0110 4.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.942.359.31.678.921.678 1.856 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0020 10.017C20 4.484 15.522 0 10 0z" clip-rule="evenodd"></path>
-                            </svg>
-                            🚀 Explore GitHub
-                        </a>
-                    </div>
-                    
-                    <div class="grid md:grid-cols-3 gap-8">
-                        <div class="modern-terminal card-hover text-center stagger-animation">
-                            <div class="terminal-content">
-                                <div class="text-4xl font-bold text-terminal-green mb-2 animate-bounce-in">13+</div>
-                                <div class="text-terminal-subtext">Years Experience</div>
-                            </div>
-                        </div>
-                        <div class="modern-terminal card-hover text-center stagger-animation" style="animation-delay: 0.2s;">
-                            <div class="terminal-content">
-                                <div class="text-4xl font-bold text-terminal-blue mb-2 animate-bounce-in" style="animation-delay: 0.2s;">50+</div>
-                                <div class="text-terminal-subtext">Projects Completed</div>
-                            </div>
-                        </div>
-                        <div class="modern-terminal card-hover text-center stagger-animation" style="animation-delay: 0.4s;">
-                            <div class="terminal-content">
-                                <div class="text-4xl font-bold text-terminal-purple mb-2 animate-bounce-in" style="animation-delay: 0.4s;">∞</div>
-                                <div class="text-terminal-subtext">Lines of Code</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="status-bar">
-                    <div class="status-indicator">
-                        <div class="status-dot"></div>
-                        <span>Repository active</span>
-                    </div>
-                    <div class="text-xs">Last commit: 2 hours ago</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="py-20 bg-terminal-bg">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="modern-terminal animate-on-scroll">
-                <div class="terminal-header">
-                    <div class="terminal-tabs">
-                        <div class="terminal-tab active">contact.sh</div>
-                        <div class="terminal-tab">message_form.html</div>
-                    </div>
-                    <div class="terminal-controls">
-                        <div class="terminal-button close"></div>
-                        <div class="terminal-button minimize"></div>
-                        <div class="terminal-button maximize"></div>
-                    </div>
-                </div>
-                <div class="terminal-content">
-                    <div class="grid md:grid-cols-2 gap-12">
-                        <div>
-                            <div class="prompt typing-fast">cat contact_info.json</div>
-                            <div class="output mt-6 space-y-4 syntax-highlight">
-                                <p class="leading-relaxed mb-8">
-                                    Ready to discuss your next project? Whether you need a robust backend system, DevOps consultation, or want to collaborate on open source projects, I'd love to hear from you.
+                                <p class="text-gray-300 text-sm">
+                                    An innovative online development platform that enables organizations to perform large-scale giveaways and charitable distributions efficiently.
                                 </p>
-                                
-                                <div class="space-y-3">
-                                    <div class="flex items-center group transition-all duration-300 hover:translate-x-2">
-                                        <span class="text-terminal-blue mr-4 font-semibold">📧 EMAIL:</span>
-                                        <a href="mailto:eminibest@gmail.com?subject=Project Inquiry&body=Hi Remilekun, I'd like to discuss a project with you." class="text-terminal-green hover:text-terminal-teal transition-colors">eminibest@gmail.com</a>
-                                    </div>
-                                    <div class="flex items-center group transition-all duration-300 hover:translate-x-2">
-                                        <span class="text-terminal-purple mr-4 font-semibold">📱 PHONE:</span>
-                                        <a href="tel:+2347085307378" class="text-terminal-green hover:text-terminal-teal transition-colors">+234 708 530 7378</a>
-                                    </div>
-                                    <div class="flex items-center group transition-all duration-300 hover:translate-x-2">
-                                        <span class="text-terminal-green mr-4 font-semibold">💬 WHATSAPP:</span>
-                                        <a href="https://wa.me/2347085307378?text=Hi%20Remilekun,%20I'd%20like%20to%20discuss%20a%20project%20with%20you." target="_blank" class="text-terminal-green hover:text-terminal-teal transition-colors">Chat Now</a>
-                                    </div>
-                                    <div class="flex items-center group transition-all duration-300 hover:translate-x-2">
-                                        <span class="text-terminal-blue mr-4 font-semibold">🔗 LINKEDIN:</span>
-                                        <a href="https://www.linkedin.com/in/remilekun-arowosaye/" target="_blank" class="text-terminal-green hover:text-terminal-teal transition-colors">Connect</a>
-                                    </div>
-                                    <div class="flex items-center group transition-all duration-300 hover:translate-x-2">
-                                        <span class="text-terminal-purple mr-4 font-semibold">🚀 GITHUB:</span>
-                                        <a href="https://github.com/cyberwizard-dev" target="_blank" class="text-terminal-green hover:text-terminal-teal transition-colors">cyberwizard-dev</a>
-                                    </div>
-                                    <div class="flex items-center group transition-all duration-300 hover:translate-x-2">
-                                        <span class="text-terminal-orange mr-4 font-semibold">📍 LOCATION:</span>
-                                        <span class="text-terminal-subtext">Abuja, Nigeria</span>
-                                    </div>
+                            </div>
+                            <!-- Core Expertise Card -->
+                            <div class="bg-night-800/50 p-6 rounded-lg card-hover stagger-animation border border-night-700" style="animation-delay: 0.2s;">
+                                <h4 class="text-xl font-semibold mb-4 text-emerald-400 typing-fast" style="animation-delay: 0.5s;">Core Expertise</h4>
+                                <ul class="text-gray-300 space-y-2 text-sm">
+                                    <li class="flex items-center"><span class="text-emerald-400 mr-2">▸</span> Backend Architecture & API Development</li>
+                                    <li class="flex items-center"><span class="text-emerald-400 mr-2">▸</span> Financial Systems & Wallet Solutions</li>
+                                    <li class="flex items-center"><span class="text-emerald-400 mr-2">▸</span> Enterprise Management Software</li>
+                                    <li class="flex items-center"><span class="text-emerald-400 mr-2">▸</span> DevOps & Cloud Infrastructure</li>
+                                    <li class="flex items-center"><span class="text-emerald-400 mr-2">▸</span> Platform Development & Scaling</li>
+                                </ul>
+                            </div>
+                            <!-- Education Card -->
+                            <div class="bg-night-800/50 p-6 rounded-lg card-hover stagger-animation border border-night-700" style="animation-delay: 0.4s;">
+                                <h4 class="text-xl font-semibold mb-3 text-emerald-400 flex items-center">
+                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path>
+                                    </svg>
+                                    Education
+                                </h4>
+                                <p class="text-gray-300 text-sm">
+                                    <span class="text-emerald-400 font-semibold">Physics and Material Science</span> graduate with strong analytical and problem-solving foundation applied to software engineering.
+                                </p>
+                            </div>
+                            <!-- Location Card -->
+                            <div class="bg-night-800/50 p-6 rounded-lg card-hover stagger-animation border border-night-700" style="animation-delay: 0.6s;">
+                                <h4 class="text-xl font-semibold mb-3 text-emerald-300 flex items-center">
+                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                    Location
+                                </h4>
+                                <p class="text-gray-300 text-sm">
+                                    Based in <span class="text-emerald-400 font-semibold">Abuja, Nigeria</span>. Available for remote work and collaborations worldwide.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Skills Section -->
+        <section id="skills" class="py-20 bg-black">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16 animate-on-scroll">
+                    <h2 class="text-4xl font-bold mb-4 typing-fast">Technical Skills</h2>
+                    <div class="w-24 h-1 bg-gradient-to-r from-emerald-600 to-emerald-400 mx-auto"></div>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="bg-night-800 p-6 rounded-lg card-hover stagger-animation">
+                        <h3 class="text-xl font-semibold mb-4 text-emerald-400 typing-fast">Backend Languages</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <span>PHP</span>
+                                <div class="w-32 bg-night-700 rounded-full h-2 skill-bar">
+                                    <div class="bg-blue-500 h-2 rounded-full w-full transition-all duration-1000 ease-out"></div>
                                 </div>
                             </div>
+                            <div class="flex justify-between items-center">
+                                <span>Laravel</span>
+                                <div class="w-32 bg-night-700 rounded-full h-2 skill-bar">
+                                    <div class="bg-red-500 h-2 rounded-full w-full transition-all duration-1000 ease-out" style="animation-delay: 0.2s;"></div>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span>Node.js</span>
+                                <div class="w-32 bg-night-700 rounded-full h-2 skill-bar">
+                                    <div class="bg-green-500 h-2 rounded-full w-5/6 transition-all duration-1000 ease-out" style="animation-delay: 0.4s;"></div>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span>Go</span>
+                                <div class="w-32 bg-night-700 rounded-full h-2 skill-bar">
+                                    <div class="bg-cyan-500 h-2 rounded-full w-2/3 transition-all duration-1000 ease-out" style="animation-delay: 0.6s;"></div>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span>Goravel</span>
+                                <div class="w-32 bg-night-700 rounded-full h-2 skill-bar">
+                                    <div class="bg-purple-500 h-2 rounded-full w-1/2 transition-all duration-1000 ease-out" style="animation-delay: 0.8s;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-night-800 p-6 rounded-lg card-hover stagger-animation" style="animation-delay: 0.2s;">
+                        <h3 class="text-xl font-semibold mb-4 text-emerald-500 typing-fast" style="animation-delay: 0.2s;">Frontend & UI</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <span>Vue.js</span>
+                                <div class="w-32 bg-night-700 rounded-full h-2 skill-bar">
+                                    <div class="bg-green-400 h-2 rounded-full w-5/6 transition-all duration-1000 ease-out"></div>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span>JavaScript</span>
+                                <div class="w-32 bg-night-700 rounded-full h-2 skill-bar">
+                                    <div class="bg-yellow-500 h-2 rounded-full w-full transition-all duration-1000 ease-out" style="animation-delay: 0.2s;"></div>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span>HTML/CSS</span>
+                                <div class="w-32 bg-night-700 rounded-full h-2 skill-bar">
+                                    <div class="bg-orange-500 h-2 rounded-full w-full transition-all duration-1000 ease-out" style="animation-delay: 0.4s;"></div>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span>Tailwind CSS</span>
+                                <div class="w-32 bg-night-700 rounded-full h-2 skill-bar">
+                                    <div class="bg-teal-500 h-2 rounded-full w-5/6 transition-all duration-1000 ease-out" style="animation-delay: 0.6s;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-night-800 p-6 rounded-lg card-hover stagger-animation" style="animation-delay: 0.4s;">
+                        <h3 class="text-xl font-semibold mb-4 text-emerald-600 typing-fast" style="animation-delay: 0.4s;">DevOps & Infrastructure</h3>
+                        <ul class="space-y-2 text-gray-300">
+                            <li>• Docker & Containerization</li>
+                            <li>• Continuous Integration/CD</li>
+                            <li>• Server Deployment & Management</li>
+                            <li>• Cloud Infrastructure (AWS, GCP)</li>
+                            <li>• Load Balancing & Scaling</li>
+                            <li>• Monitoring & Logging</li>
+                        </ul>
+                    </div>
+                    <div class="bg-night-800 p-6 rounded-lg card-hover stagger-animation" style="animation-delay: 0.6s;">
+                        <h3 class="text-xl font-semibold mb-4 text-emerald-300 typing-fast" style="animation-delay: 0.6s;">Databases & Tools</h3>
+                        <ul class="space-y-2 text-gray-300">
+                            <li>• MySQL, PostgreSQL</li>
+                            <li>• Redis, MongoDB</li>
+                            <li>• RESTful API Design</li>
+                            <li>• GraphQL</li>
+                            <li>• Git Version Control</li>
+                            <li>• Agile Development</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section id="experience" class="py-20 section-bg">
+            <div class="section-content">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-16 animate-on-scroll">
+                        <h2 class="text-4xl font-bold mb-4 typing-slow">Experience & Projects</h2>
+                        <div class="w-24 h-1 bg-gradient-to-r from-emerald-600 to-emerald-400 mx-auto"></div>
+                    </div>
+                    <div class="space-y-8">
+                        <!-- CharityChest -->
+                        <div class="bg-gradient-to-r from-emerald-900/20 to-emerald-800/10 p-8 rounded-lg card-hover stagger-animation border border-emerald-500/20">
+                            <div class="flex items-start gap-4 mb-4">
+                                <div class="w-16 h-16 bg-emerald-500 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <span class="text-3xl">🎁</span>
+                                </div>
+                                <div>
+                                    <h3 class="text-2xl font-semibold mb-2 gradient-text typing-slow">CharityChest Platform</h3>
+                                    <p class="text-emerald-400 font-semibold mb-2">Founder & Lead Developer</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-300 mb-4 leading-relaxed">
+                                Founded and developed CharityChest, an innovative online development platform that enables organizations to perform large-scale giveaways and charitable distributions efficiently. The platform handles complex logistics of managing thousands of participants, automated selection processes, and secure distribution mechanisms.
+                            </p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="bg-emerald-600 text-white px-3 py-1 rounded-full text-sm transition-all duration-300 hover:scale-110">Platform Development</span>
+                                <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-sm transition-all duration-300 hover:scale-110">Laravel</span>
+                                <span class="bg-green-600 text-white px-3 py-1 rounded-full text-sm transition-all duration-300 hover:scale-110">Vue.js</span>
+                                <span class="bg-purple-600 text-white px-3 py-1 rounded-full text-sm transition-all duration-300 hover:scale-110">MySQL</span>
+                                <span class="bg-orange-600 text-white px-3 py-1 rounded-full text-sm transition-all duration-300 hover:scale-110">AWS</span>
+                            </div>
+                        </div>
+
+                        <!-- Financial Wallet Systems -->
+                        <div class="bg-night-800/50 p-8 rounded-lg card-hover stagger-animation border border-night-700">
+                            <h3 class="text-2xl font-semibold mb-3 gradient-text typing-slow">Financial Wallet Systems</h3>
+                            <p class="text-gray-300 mb-4">
+                                Architected and developed secure, scalable wallet systems handling millions in transactions. Implemented multi-currency support, real-time balance tracking, and comprehensive audit trails with 99.9% uptime.
+                            </p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-sm transition-all duration-300 hover:scale-110">PHP</span>
+                                <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm transition-all duration-300 hover:scale-110">Laravel</span>
+                                <span class="bg-green-600 text-white px-3 py-1 rounded-full text-sm transition-all duration-300 hover:scale-110">MySQL</span>
+                                <span class="bg-purple-600 text-white px-3 py-1 rounded-full text-sm transition-all duration-300 hover:scale-110">Redis</span>
+                            </div>
+                        </div>
+
+                        <!-- Attendance Management -->
+                        <div class="bg-night-800/50 p-8 rounded-lg card-hover stagger-animation border border-night-700" style="animation-delay: 0.2s;">
+                            <h3 class="text-2xl font-semibold mb-3 gradient-text typing-slow" style="animation-delay: 0.3s;">Attendance Management Systems</h3>
+                            <p class="text-gray-300 mb-4">
+                                Built comprehensive attendance tracking solutions for enterprises, featuring biometric integration, automated reporting, and real-time analytics. Served organizations with 10,000+ employees.
+                            </p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-sm transition-all duration-300 hover:scale-110">Laravel</span>
+                                <span class="bg-yellow-600 text-white px-3 py-1 rounded-full text-sm transition-all duration-300 hover:scale-110">JavaScript</span>
+                                <span class="bg-green-600 text-white px-3 py-1 rounded-full text-sm transition-all duration-300 hover:scale-110">PostgreSQL</span>
+                                <span class="bg-gray-600 text-white px-3 py-1 rounded-full text-sm transition-all duration-300 hover:scale-110">Docker</span>
+                            </div>
+                        </div>
+
+                        <!-- People Management -->
+                        <div class="bg-night-800/50 p-8 rounded-lg card-hover stagger-animation border border-night-700" style="animation-delay: 0.4s;">
+                            <h3 class="text-2xl font-semibold mb-3 gradient-text typing-slow" style="animation-delay: 0.6s;">People Management Software</h3>
+                            <p class="text-gray-300 mb-4">
+                                Developed enterprise-grade HR and people management platforms with features including employee onboarding, performance tracking, payroll integration, and advanced reporting capabilities.
+                            </p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="bg-green-600 text-white px-3 py-1 rounded-full text-sm transition-all duration-300 hover:scale-110">Node.js</span>
+                                <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-sm transition-all duration-300 hover:scale-110">Express</span>
+                                <span class="bg-orange-600 text-white px-3 py-1 rounded-full text-sm transition-all duration-300 hover:scale-110">MongoDB</span>
+                                <span class="bg-cyan-600 text-white px-3 py-1 rounded-full text-sm transition-all duration-300 hover:scale-110">AWS</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="py-20 bg-black">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16 animate-on-scroll">
+                    <h2 class="text-4xl font-bold mb-4">Open Source Contributions</h2>
+                    <div class="w-24 h-1 bg-gradient-to-r from-emerald-600 to-emerald-400 mx-auto"></div>
+                </div>
+                <div class="text-center mb-12 animate-on-scroll">
+                    <p class="text-xl text-gray-300 mb-8">
+                        I believe in giving back to the developer community through open source contributions and creating tools that help other developers build better applications.
+                    </p>
+                    <a href="https://github.com/cyberwizard-dev" target="_blank" class="inline-flex items-center bg-gradient-to-r from-emerald-600 to-emerald-400 hover:from-emerald-700 hover:to-emerald-500 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 btn-glow">
+                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 0C4.477 0 0 4.484 0 10.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0110 4.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.942.359.31.678.921.678 1.856 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0020 10.017C20 4.484 15.522 0 10 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        Explore My GitHub
+                    </a>
+                </div>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="bg-night-800 p-6 rounded-lg card-hover text-center stagger-animation">
+                        <div class="text-4xl font-bold text-emerald-400 mb-2 animate-bounce-in">13+</div>
+                        <div class="text-gray-300">Years Experience</div>
+                    </div>
+                    <div class="bg-night-800 p-6 rounded-lg card-hover text-center stagger-animation" style="animation-delay: 0.2s;">
+                        <div class="text-4xl font-bold text-emerald-500 mb-2 animate-bounce-in" style="animation-delay: 0.2s;">50+</div>
+                        <div class="text-gray-300">Projects Completed</div>
+                    </div>
+                    <div class="bg-night-800 p-6 rounded-lg card-hover text-center stagger-animation" style="animation-delay: 0.4s;">
+                        <div class="text-4xl font-bold text-emerald-600 mb-2 animate-bounce-in" style="animation-delay: 0.4s;">∞</div>
+                        <div class="text-gray-300">Lines of Code</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-20 section-bg">
+            <div class="section-content">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-16 animate-on-scroll">
+                        <h2 class="text-4xl font-bold mb-4">Let's Connect</h2>
+                        <div class="w-24 h-1 bg-gradient-to-r from-emerald-600 to-emerald-400 mx-auto"></div>
+                    </div>
+                    <div class="max-w-4xl mx-auto">
+                        <div class="text-center mb-12 animate-on-scroll">
+                            <h3 class="text-2xl font-semibold mb-6 gradient-text typing-fast">Ready to Work Together?</h3>
+                            <p class="text-gray-300 mb-8 leading-relaxed text-lg">
+                                Whether you need a robust backend system, want to discuss CharityChest, DevOps consultation, or collaborate on open source projects, I'd love to hear from you.
+                            </p>
                         </div>
                         
-                        <div class="modern-terminal card-hover">
-                            <div class="terminal-header">
-                                <div class="terminal-tabs">
-                                    <div class="terminal-tab active">send_message.php</div>
+                        <!-- Contact Cards Grid -->
+                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+                            <!-- Email Card -->
+                            <div class="bg-night-800/50 p-6 rounded-lg card-hover text-center animate-on-scroll border border-night-700">
+                                <div class="w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                    </svg>
                                 </div>
+                                <h4 class="text-xl font-semibold mb-2 text-blue-400">Email</h4>
+                                <p class="text-gray-400 mb-4 text-sm">Best for detailed discussions</p>
+                                <a href="mailto:eminibest@gmail.com?subject=Project Inquiry&body=Hi Remilekun, I'd like to discuss a project with you." class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 btn-glow text-sm">
+                                    Send Email
+                                </a>
                             </div>
-                            <div class="terminal-content">
-                                <form class="space-y-6" id="contact-form">
-                                    <div>
-                                        <label for="name" class="block text-sm font-medium text-terminal-green mb-2">$name =</label>
-                                        <input type="text" id="name" name="name" class="w-full px-4 py-3 bg-terminal-surface border border-terminal-overlay text-terminal-text font-mono focus:border-terminal-green focus:outline-none transition-all duration-300 rounded-lg" required>
-                                    </div>
-                                    <div>
-                                        <label for="email" class="block text-sm font-medium text-terminal-blue mb-2">$email =</label>
-                                        <input type="email" id="email" name="email" class="w-full px-4 py-3 bg-terminal-surface border border-terminal-overlay text-terminal-text font-mono focus:border-terminal-blue focus:outline-none transition-all duration-300 rounded-lg" required>
-                                    </div>
-                                    <div>
-                                        <label for="message" class="block text-sm font-medium text-terminal-purple mb-2">$message =</label>
-                                        <textarea id="message" name="message" rows="4" class="w-full px-4 py-3 bg-terminal-surface border border-terminal-overlay text-terminal-text font-mono focus:border-terminal-purple focus:outline-none transition-all duration-300 rounded-lg" required></textarea>
-                                    </div>
-                                    <button type="submit" class="w-full btn-modern">
-                                        🚀 Execute Send
-                                    </button>
-                                </form>
+
+                            <!-- WhatsApp Card -->
+                            <div class="bg-night-800/50 p-6 rounded-lg card-hover text-center animate-on-scroll border border-night-700" style="animation-delay: 0.2s;">
+                                <div class="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <svg class="w-8 h-8 text-green-400" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
+                                    </svg>
+                                </div>
+                                <h4 class="text-xl font-semibold mb-2 text-green-400">WhatsApp</h4>
+                                <p class="text-gray-400 mb-4 text-sm">Quick chats & instant responses</p>
+                                <a href="https://wa.me/2347085307378?text=Hi%20Remilekun,%20I'd%20like%20to%20discuss%20a%20project%20with%20you." target="_blank" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 btn-glow text-sm">
+                                    Chat Now
+                                </a>
+                            </div>
+
+                            <!-- LinkedIn Card -->
+                            <div class="bg-night-800/50 p-6 rounded-lg card-hover text-center animate-on-scroll border border-night-700" style="animation-delay: 0.4s;">
+                                <div class="w-16 h-16 bg-blue-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <svg class="w-8 h-8 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                                    </svg>
+                                </div>
+                                <h4 class="text-xl font-semibold mb-2 text-blue-500">LinkedIn</h4>
+                                <p class="text-gray-400 mb-4 text-sm">Professional networking</p>
+                                <a href="https://www.linkedin.com/in/remilekun-arowosaye/" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 btn-glow text-sm">
+                                    Connect
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Additional Info -->
+                        <div class="text-center animate-on-scroll">
+                            <div class="bg-night-800/30 p-6 rounded-lg border border-night-700">
+                                <div class="flex items-center justify-center mb-4">
+                                    <svg class="w-6 h-6 text-emerald-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                    <span class="text-gray-300">📍 Based in <span class="text-emerald-400 font-semibold">Abuja, Nigeria</span></span>
+                                </div>
+                                <p class="text-gray-400 text-sm">
+                                    Available for remote work and collaborations worldwide. 
+                                    Typically respond within 24 hours.
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="status-bar">
-                    <div class="status-indicator">
-                        <div class="status-dot"></div>
-                        <span>Ready to connect</span>
-                    </div>
-                    <div class="text-xs">Response time: &lt; 24h</div>
-                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Footer -->
-    <footer class="bg-terminal-bg border-t border-terminal-overlay py-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="modern-terminal animate-fade-in">
-                <div class="terminal-content text-center">
-                    <div class="syntax-highlight">
-                        <span class="comment">// © </span><span id="current-year"></span><span class="comment"> Remilekun Arowosaye (Cyberwizard)</span><br/>
-                        <span class="comment">// Built with passion for clean code and robust systems</span>
-                    </div>
+        <!-- Footer -->
+        <footer class="bg-night-950 border-t border-night-800 py-8">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center animate-fade-in">
+                    <p class="text-gray-400">
+                        © <span id="current-year"></span> Remilekun Arowosaye (Cyberwizard) • Founder of CharityChest • Built with passion for clean code and robust systems.
+                    </p>
                 </div>
             </div>
-        </div>
-    </footer>
+        </footer>
+    </div>
 
     <script>
+        // Immediately hide loading screen and show content
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                const loadingOverlay = document.getElementById('loading-overlay');
+                const mainContent = document.getElementById('main-content');
+                
+                if (loadingOverlay) {
+                    loadingOverlay.style.opacity = '0';
+                    setTimeout(function() {
+                        loadingOverlay.style.display = 'none';
+                    }, 500);
+                }
+            }, 1500); // Show loading for 1.5 seconds
+        });
+    
         // Set current year
         document.getElementById('current-year').textContent = new Date().getFullYear();
-
-        // Loading screen
-        window.addEventListener('load', () => {
-            const loadingOverlay = document.getElementById('loading-overlay');
-            setTimeout(() => {
-                loadingOverlay.style.opacity = '0';
-                setTimeout(() => {
-                    loadingOverlay.style.display = 'none';
-                }, 500);
-            }, 2000);
-        });
-
-        // Mobile menu toggle with animation
+    
+        // Mobile menu toggle
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
         let isMenuOpen = false;
         
-        mobileMenuBtn.addEventListener('click', () => {
-            if (!isMenuOpen) {
-                mobileMenu.classList.remove('hidden');
-                mobileMenu.classList.add('mobile-menu-enter-active');
-                isMenuOpen = true;
-            } else {
-                mobileMenu.classList.add('mobile-menu-exit-active');
-                setTimeout(() => {
+        if (mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.addEventListener('click', function() {
+                if (!isMenuOpen) {
+                    mobileMenu.classList.remove('hidden');
+                    isMenuOpen = true;
+                } else {
                     mobileMenu.classList.add('hidden');
-                    mobileMenu.classList.remove('mobile-menu-enter-active', 'mobile-menu-exit-active');
                     isMenuOpen = false;
-                }, 300);
-            }
-        });
-
+                }
+            });
+        }
+    
         // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
+        document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+            anchor.addEventListener('click', function(e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
@@ -1211,166 +887,77 @@
                         block: 'start'
                     });
                     // Close mobile menu if open
-                    if (isMenuOpen) {
-                        mobileMenu.classList.add('mobile-menu-exit-active');
-                        setTimeout(() => {
-                            mobileMenu.classList.add('hidden');
-                            mobileMenu.classList.remove('mobile-menu-enter-active', 'mobile-menu-exit-active');
-                            isMenuOpen = false;
-                        }, 300);
+                    if (isMenuOpen && mobileMenu) {
+                        mobileMenu.classList.add('hidden');
+                        isMenuOpen = false;
                     }
                 }
             });
         });
-
+    
         // Scroll animations
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
         };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
+    
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('animate');
                 }
             });
         }, observerOptions);
-
+    
         // Observe elements for scroll animations
-        document.querySelectorAll('.animate-on-scroll, .stagger-animation').forEach(el => {
+        document.querySelectorAll('.animate-on-scroll, .stagger-animation').forEach(function(el) {
             observer.observe(el);
         });
-
-        // Staggered animations
-        const staggerObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const staggerElements = entry.target.querySelectorAll('.stagger-animation');
-                    staggerElements.forEach((el, index) => {
-                        setTimeout(() => {
-                            el.classList.add('animate');
-                        }, index * 100);
-                    });
-                }
-            });
-        }, observerOptions);
-
-        // Observe sections with staggered elements
-        document.querySelectorAll('#skills, #experience, #projects').forEach(section => {
-            staggerObserver.observe(section);
-        });
-
-        // Enhanced form submission with animation
-        document.getElementById('contact-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const button = this.querySelector('button[type="submit"]');
-            const originalText = button.innerHTML;
-            
-            // Animate button
-            button.innerHTML = '⏳ Executing...';
-            button.classList.add('animate-pulse');
-            
-            // Simulate form submission
-            setTimeout(() => {
-                button.innerHTML = '✅ Message Sent!';
-                button.classList.remove('animate-pulse');
-                
-                // Show success message
-                const successMessage = document.createElement('div');
-                successMessage.className = 'mt-4 p-4 bg-terminal-surface border border-terminal-green text-terminal-green text-center animate-fade-in rounded-lg';
-                successMessage.innerHTML = '<span class="syntax-highlight"><span class="comment">// Success: Message delivered successfully!</span></span>';
-                this.appendChild(successMessage);
-                
-                // Reset form
-                this.reset();
-                
-                // Reset button after delay
-                setTimeout(() => {
-                    button.innerHTML = originalText;
-                    successMessage.remove();
-                }, 3000);
-            }, 2000);
-        });
-
+    
         // Enhanced scroll effect for navigation
         let lastScrollTop = 0;
-        window.addEventListener('scroll', () => {
+        window.addEventListener('scroll', function() {
             const nav = document.querySelector('nav');
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            
-            if (scrollTop > 100) {
-                nav.style.transform = scrollTop > lastScrollTop ? 'translateY(-100%)' : 'translateY(0)';
-            } else {
-                nav.style.transform = 'translateY(0)';
-            }
-            
-            lastScrollTop = scrollTop;
-        });
-
-        // Enhanced typewriting animation restart
-        const typingElements = document.querySelectorAll('.typing-animation, .typing-slow, .typing-fast');
-        const typingObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const element = entry.target;
-                    const animationClass = element.classList.contains('typing-slow') ? 'typing-slow' : 
-                            element.classList.contains('typing-fast') ? 'typing-fast' : 'typing';
-       
-                    element.style.animation = 'none';
-                    setTimeout(() => {
-                        const duration = animationClass === 'typing-slow' ? '4s' : 
-                                  animationClass === 'typing-fast' ? '2s' : '3.5s';
-                        const steps = animationClass === 'typing-slow' ? '50' : 
-                               animationClass === 'typing-fast' ? '30' : '40';
-                        element.style.animation = `${animationClass} ${duration} steps(${steps}, end), blink-caret .75s step-end infinite`;
-                    }, 100);
-                }
-            });
-        });
-
-        typingElements.forEach(el => {
-            typingObserver.observe(el);
-        });
-
-        // Terminal tab switching animation
-        document.querySelectorAll('.terminal-tab').forEach(tab => {
-            tab.addEventListener('click', function() {
-                // Remove active class from siblings
-                this.parentElement.querySelectorAll('.terminal-tab').forEach(t => t.classList.remove('active'));
-                // Add active class to clicked tab
-                this.classList.add('active');
-            });
-        });
-
-        // Add subtle parallax effect to terminal windows
-        window.addEventListener('scroll', () => {
-            const terminals = document.querySelectorAll('.modern-terminal');
-            const scrolled = window.pageYOffset;
-            
-            terminals.forEach((terminal, index) => {
-                const rate = scrolled * -0.02 * (index + 1);
-                terminal.style.transform = `translateY(${rate}px)`;
-            });
-        });
-
-        // Terminal window controls functionality
-        document.querySelectorAll('.terminal-button').forEach(button => {
-            button.addEventListener('click', function() {
-                const terminal = this.closest('.modern-terminal');
+            if (nav) {
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
                 
-                if (this.classList.contains('close')) {
-                    terminal.style.opacity = '0.5';
-                    setTimeout(() => terminal.style.opacity = '1', 500);
-                } else if (this.classList.contains('minimize')) {
-                    terminal.style.transform = 'scale(0.95)';
-                    setTimeout(() => terminal.style.transform = 'scale(1)', 300);
-                } else if (this.classList.contains('maximize')) {
-                    terminal.style.transform = 'scale(1.02)';
-                    setTimeout(() => terminal.style.transform = 'scale(1)', 300);
+                if (scrollTop > 100) {
+                    nav.classList.add('bg-night-950/95', 'backdrop-blur-lg');
+                    nav.style.transform = scrollTop > lastScrollTop ? 'translateY(-100%)' : 'translateY(0)';
+                } else {
+                    nav.classList.remove('bg-night-950/95', 'backdrop-blur-lg');
+                    nav.style.transform = 'translateY(0)';
                 }
-            });
+                
+                lastScrollTop = scrollTop;
+            }
         });
+    
+        // Add particle animation
+        function createParticle() {
+            const heroSection = document.querySelector('#home');
+            if (heroSection) {
+                const particle = document.createElement('div');
+                const emeraldColors = ['bg-emerald-400', 'bg-emerald-500', 'bg-emerald-300', 'bg-emerald-600'];
+                const randomColor = emeraldColors[Math.floor(Math.random() * emeraldColors.length)];
+                
+                particle.className = 'absolute w-1 h-1 ' + randomColor + ' rounded-full opacity-30';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = '100%';
+                particle.style.animation = 'float ' + (3 + Math.random() * 2) + 's ease-in-out infinite';
+                
+                heroSection.appendChild(particle);
+                
+                setTimeout(function() {
+                    if (particle.parentNode) {
+                        particle.remove();
+                    }
+                }, 5000);
+            }
+        }
+    
+        // Create particles periodically
+        setInterval(createParticle, 2000);
     </script>
 </body>
 </html>
